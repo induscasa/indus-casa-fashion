@@ -100,7 +100,7 @@
       position:absolute;inset:-5%;
       background:
         linear-gradient(90deg,rgba(4,10,16,.82) 0%,rgba(4,10,16,.42) 48%,rgba(4,10,16,.74) 100%),
-        url("assets/product-navy.png") center/cover no-repeat;
+        url("product-navy.png") center/cover no-repeat;
       transform:scale(1.06);
       animation:heroZoom 14s ease-out forwards;
       z-index:-2;
@@ -258,7 +258,7 @@
       background:var(--cream);color:var(--ink);
       display:grid;grid-template-columns:.9fr 1.1fr;min-height:650px
     }
-    .story-image{min-height:650px;background:url("assets/product-cream.png") center/cover no-repeat}
+    .story-image{min-height:650px;background:url("product-cream.png") center/cover no-repeat}
     .story-copy{padding:90px 8vw;display:flex;flex-direction:column;justify-content:center}
     .story-copy h2{font-family:var(--serif);font-size:clamp(48px,5.5vw,78px);font-weight:500;line-height:.9;margin-bottom:28px}
     .story-copy p{color:#5d646b;max-width:520px;font-size:14px;line-height:2;font-weight:300}
@@ -296,6 +296,75 @@
     .footer-links h4{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:15px}
     .footer-links a{display:block;color:#aab0b5;font-size:11px;margin:9px 0}
     .footer-bottom{padding-top:25px;display:flex;justify-content:space-between;color:#68727a;font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+
+    :root{--ink:#151b20;--navy:#07131d;--navy-2:#0b1b28;--navy-3:#102b3b;--gold:#c9a35b;--gold-soft:#ead39b;--cream:#f3eee5}
+    body{background:var(--navy);letter-spacing:.01em}
+    body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:49;opacity:.22;background:linear-gradient(90deg,transparent 0 49.8%,rgba(202,164,90,.08) 50%,transparent 50.2%);mix-blend-mode:screen}
+    .nav{padding:24px 6vw}
+    .nav.scrolled{padding:14px 6vw;background:rgba(7,19,29,.9)}
+    .wordmark{font-size:23px;color:var(--white)}
+    .nav-links{gap:30px}
+    .nav-links a{position:relative}
+    .nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:-8px;height:1px;background:var(--gold);transition:right .3s ease}
+    .nav-links a:hover::after{right:0}
+    .nav-menu{display:none;width:42px;height:42px;padding:0;border:1px solid rgba(202,164,90,.45);background:transparent;color:var(--white);cursor:pointer}
+    .nav-menu span,.nav-menu span::before,.nav-menu span::after{display:block;width:15px;height:1px;margin:auto;background:currentColor;content:"";transition:transform .25s ease}
+    .nav-menu span::before{transform:translateY(-5px)}
+    .nav-menu span::after{transform:translateY(4px)}
+    .nav-menu[aria-expanded="true"] span{background:transparent}
+    .nav-menu[aria-expanded="true"] span::before{transform:translateY(0) rotate(45deg)}
+    .nav-menu[aria-expanded="true"] span::after{transform:translateY(-1px) rotate(-45deg)}
+    .mobile-nav{display:none}
+    .hero{background:#040b11}
+    .hero-content{width:min(1240px,88vw)}
+    .hero-copy{padding-left:2vw}
+    .hero-seal{border-color:rgba(234,211,155,.55);background:rgba(7,19,29,.2)}
+    .intro{position:relative;padding-top:135px;padding-bottom:135px}
+    .intro::before,.colour-bar::before{content:"INDUS CASA / 2024";position:absolute;top:38px;left:7vw;color:rgba(141,109,51,.62);font-size:8px;letter-spacing:.3em}
+    .section{padding-top:125px;padding-bottom:125px}
+    .collection-card,.product{box-shadow:0 20px 55px rgba(0,0,0,.16)}
+    .collection-card{border-color:rgba(234,211,155,.18)}
+    .product{transition:box-shadow .35s ease,transform .35s ease}
+    .product:hover{box-shadow:0 25px 60px rgba(0,0,0,.3)}
+    .product-info{padding:24px 23px 26px}
+    .story{position:relative}
+    .story-copy{padding-left:9vw;padding-right:9vw}
+    .order{position:relative;background:radial-gradient(circle at 50% 0,rgba(202,164,90,.18),transparent 38%),linear-gradient(135deg,#050c13,#0d1d29)}
+    @media (max-width:900px){
+      .nav-menu{display:block}
+      .nav-actions{gap:10px}
+      .mobile-nav{position:fixed;top:73px;left:20px;right:20px;z-index:880;padding:22px;background:rgba(7,19,29,.97);border:1px solid rgba(202,164,90,.35);box-shadow:0 24px 60px rgba(0,0,0,.3)}
+      .mobile-nav.open{display:block}
+      .mobile-nav a{display:block;padding:14px 2px;border-bottom:1px solid rgba(255,255,255,.1);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.85)}
+      .mobile-nav a:last-child{border-bottom:0}
+      .mobile-nav a:hover{color:var(--gold-soft)}
+      .hero-content{width:86vw}
+      .hero-copy{padding-left:0}
+      .intro::before,.colour-bar::before{left:6vw}
+    }
+    @media (max-width:600px){
+      .nav{padding:16px 20px}
+      .nav.scrolled{padding:12px 20px}
+      .mobile-nav{top:64px;left:14px;right:14px}
+      .nav-instagram{width:36px;height:36px}
+      .hero{min-height:860px}
+      .hero-content{padding-top:90px}
+      .hero h1{font-size:clamp(57px,16vw,76px);line-height:.86}
+      .hero-seal{width:min(220px,75vw);justify-self:start}
+      .scroll-note{left:20px;bottom:20px}
+      .intro{padding-top:100px;padding-bottom:100px}
+      .intro h2{font-size:clamp(44px,13vw,64px)}
+      .section{padding-top:88px;padding-bottom:88px}
+      .section-head h2{font-size:clamp(45px,13vw,65px)}
+      .collection-info{left:22px;right:22px;bottom:22px}
+      .collection-info h3{font-size:37px}
+      .story-image{min-height:430px}
+      .story-copy{padding:75px 7vw 85px}
+      .story-copy h2{font-size:clamp(50px,14vw,72px)}
+      .order{padding:100px 7vw}
+      .order h2{font-size:clamp(50px,14vw,76px)}
+      .btn{width:100%;padding:0 14px}
+    }
 
     .reveal{opacity:0;transform:translateY(35px);transition:opacity .9s ease,transform .9s ease}
     .reveal.visible{opacity:1;transform:none}
@@ -354,6 +423,13 @@
       <a class="nav-instagram" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener" aria-label="Indus Casa on Instagram">
         <span aria-hidden="true">◎</span>
       </a>
+      <button class="nav-menu" id="menuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
+    </div>
+    <div class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+      <a href="#collection">Collection</a>
+      <a href="#pieces">Signature Pieces</a>
+      <a href="#house">The House</a>
+      <a href="#order">Enquire</a>
     </div>
   </header>
 
@@ -374,7 +450,7 @@
           </div>
         </div>
         <div class="hero-seal">
-          <img src="assets/indus-casa-logo.png" alt="Indus Casa logo — EST. 2024, Uttar Pradesh, India">
+          <img src="indus-casa-logo.png" alt="Indus Casa logo — EST. 2024, Uttar Pradesh, India">
         </div>
       </div>
       <div class="scroll-note"><span></span>Scroll to discover</div>
@@ -400,7 +476,7 @@
 
       <div class="collection-grid">
         <a class="collection-card reveal" href="#pieces">
-          <img src="assets/product-navy.png" alt="Indus Casa navy signature polo and shirt presentation">
+          <img src="product-navy.png" alt="Indus Casa navy signature polo and shirt presentation">
           <div class="collection-info">
             <small>01 · The signature</small>
             <h3>Midnight Navy</h3>
@@ -408,7 +484,7 @@
           </div>
         </a>
         <a class="collection-card small reveal" href="#pieces">
-          <img src="assets/product-white.png" alt="Indus Casa white signature polo and shirt presentation">
+          <img src="product-white.png" alt="Indus Casa white signature polo and shirt presentation">
           <div class="collection-info">
             <small>02 · The classic</small>
             <h3>Pure White</h3>
@@ -430,7 +506,7 @@
       <div class="product-grid">
         <article class="product reveal">
           <div class="product-media">
-            <img src="assets/product-navy-detail.png" alt="Indus Casa navy shirt">
+            <img src="product-navy-detail.png" alt="Indus Casa navy shirt">
             <span class="product-badge">Signature</span>
           </div>
           <div class="product-info">
@@ -442,7 +518,7 @@
 
         <article class="product reveal">
           <div class="product-media">
-            <img src="assets/product-white-detail.png" alt="Indus Casa white shirt">
+            <img src="product-white-detail.png" alt="Indus Casa white shirt">
             <span class="product-badge">Essential</span>
           </div>
           <div class="product-info">
@@ -454,7 +530,7 @@
 
         <article class="product reveal">
           <div class="product-media">
-            <img src="assets/product-beige.png" alt="Indus Casa beige shirt">
+            <img src="product-beige.png" alt="Indus Casa beige shirt">
             <span class="product-badge">Neutral Edit</span>
           </div>
           <div class="product-info">
@@ -466,7 +542,7 @@
 
         <article class="product reveal">
           <div class="product-media">
-            <img src="assets/product-lilac.png" alt="Indus Casa lilac shirt">
+            <img src="product-lilac.png" alt="Indus Casa lilac shirt">
             <span class="product-badge">Statement</span>
           </div>
           <div class="product-info">
@@ -478,7 +554,7 @@
 
         <article class="product reveal">
           <div class="product-media">
-            <img src="assets/product-cream.png" alt="Indus Casa cream shirt">
+            <img src="product-cream.png" alt="Indus Casa cream shirt">
             <span class="product-badge">Luxe Neutral</span>
           </div>
           <div class="product-info">
@@ -490,7 +566,7 @@
 
         <article class="product reveal">
           <div class="product-media">
-            <img src="assets/product-white.png" alt="Indus Casa white boxed shirt presentation">
+            <img src="product-white.png" alt="Indus Casa white boxed shirt presentation">
             <span class="product-badge">Gift Ready</span>
           </div>
           <div class="product-info">
@@ -503,7 +579,7 @@
     </section>
 
     <section class="story" id="house">
-      <div class="story-image reveal"></div>
+      <div class="story-image reveal" role="img" aria-label="Indus Casa cream shirt presentation"></div>
       <div class="story-copy">
         <div class="kicker reveal">The House of Indus Casa</div>
         <h2 class="reveal">Crafted in India.<br>Defined by detail.</h2>
@@ -525,11 +601,11 @@
         <p>From midnight navy to soft lilac, discover a palette made for different moods and moments.</p>
       </div>
       <div class="swatches">
-        <div class="swatch reveal"><img src="assets/product-navy.png" alt="Midnight navy"><span>Midnight Navy</span></div>
-        <div class="swatch reveal"><img src="assets/product-white.png" alt="Pure white"><span>Pure White</span></div>
-        <div class="swatch reveal"><img src="assets/product-beige.png" alt="Soft beige"><span>Soft Beige</span></div>
-        <div class="swatch reveal"><img src="assets/product-lilac.png" alt="Soft lilac"><span>Soft Lilac</span></div>
-        <div class="swatch reveal"><img src="assets/product-cream.png" alt="Ivory cream"><span>Ivory Cream</span></div>
+        <div class="swatch reveal"><img src="product-navy.png" alt="Midnight navy"><span>Midnight Navy</span></div>
+        <div class="swatch reveal"><img src="product-white.png" alt="Pure white"><span>Pure White</span></div>
+        <div class="swatch reveal"><img src="product-beige.png" alt="Soft beige"><span>Soft Beige</span></div>
+        <div class="swatch reveal"><img src="product-lilac.png" alt="Soft lilac"><span>Soft Lilac</span></div>
+        <div class="swatch reveal"><img src="product-cream.png" alt="Ivory cream"><span>Ivory Cream</span></div>
       </div>
     </section>
 
@@ -573,6 +649,20 @@
   <script>
     const nav = document.getElementById('nav');
     const progress = document.getElementById('progress');
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileNav = document.getElementById('mobileNav');
+
+    function closeMobileNav(){
+      mobileNav.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.setAttribute('aria-label', 'Open navigation menu');
+    }
+    menuToggle.addEventListener('click', ()=>{
+      const isOpen = mobileNav.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+    });
+    mobileNav.querySelectorAll('a').forEach(link=>link.addEventListener('click', closeMobileNav));
 
     function onScroll(){
       nav.classList.toggle('scrolled', window.scrollY > 40);
