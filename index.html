@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -24,7 +24,7 @@
       --muted:#a9b0b7;
       --line:rgba(202,164,90,.24);
       --serif:"Cormorant Garamond", Georgia, serif;
-      --sans:"Inter", Arial, sans-serif;
+      --sans:"Manrope", Arial, sans-serif;
       --shadow:0 28px 80px rgba(0,0,0,.28);
     }
 
@@ -403,6 +403,82 @@
       .footer-bottom{display:block;line-height:2}
       .footer-bottom span{display:block}
     }
+
+    :root{
+      --navy:#07131d;
+      --navy-2:#0c1d2a;
+      --navy-3:#123245;
+      --gold:#c9a35b;
+      --gold-soft:#f0dca8;
+      --cream:#f4efe6;
+      --white:#fffdf8;
+      --muted:#aeb8bf;
+      --line:rgba(234,211,155,.22);
+    }
+    body{letter-spacing:.02em}
+    body::after{display:none}
+    a,button{-webkit-tap-highlight-color:transparent}
+    a:focus-visible,button:focus-visible{outline:2px solid var(--gold-soft);outline-offset:5px}
+    .nav{padding:26px 6vw}
+    .nav.scrolled{background:rgba(7,19,29,.94);box-shadow:0 14px 40px rgba(0,0,0,.14)}
+    .wordmark{font-size:24px;letter-spacing:.22em}
+    .nav-links{font-weight:500}
+    .nav-instagram{font-size:18px}
+    .hero-bg{background-position:center 42%}
+    .hero-content{gap:clamp(45px,8vw,120px)}
+    .hero h1{font-size:clamp(68px,9vw,132px);line-height:.78}
+    .hero-sub{font-size:13px;max-width:480px}
+    .hero-seal{max-width:350px;background:rgba(7,19,29,.34);backdrop-filter:blur(4px)}
+    .scroll-note{bottom:34px}
+    .section-head{margin-bottom:52px}
+    .section-head h2{letter-spacing:-.015em}
+    .collection-grid{gap:24px}
+    .collection-card,.collection-card.small{min-height:680px}
+    .collection-card::before{content:"";position:absolute;inset:14px;border:1px solid rgba(255,255,255,.18);z-index:2;pointer-events:none;opacity:0;transition:opacity .5s ease}
+    .collection-card:hover::before{opacity:1}
+    .collection-info{left:38px;right:38px;bottom:38px}
+    .collection-info h3{font-size:47px}
+    .products{background:linear-gradient(140deg,#081521 0%,#0b1a26 58%,#102638 100%)}
+    .product-grid{gap:22px}
+    .product{background:rgba(14,31,44,.82);border-color:rgba(234,211,155,.14)}
+    .product-media{aspect-ratio:1/.98}
+    .product-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 65%,rgba(0,0,0,.2));pointer-events:none}
+    .product-info h3{font-size:31px}
+    .product-link{display:inline-flex;align-items:center;min-height:34px;border-bottom:1px solid var(--gold);transition:color .25s ease,border-color .25s ease}
+    .product-link:hover{color:var(--white);border-color:var(--white)}
+    .story-image{background-position:center}
+    .colour-bar{background:linear-gradient(135deg,#102b3b,#0d2231)}
+    .swatch{min-height:190px}
+    .swatch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.62));pointer-events:none}
+    .swatch span{z-index:1}
+    .order{padding-top:145px;padding-bottom:145px}
+    .order h2{letter-spacing:-.015em}
+    .btn{min-height:52px;font-weight:600}
+    .footer-links a{transition:color .25s ease;padding:2px 0}
+    .footer-links a:hover{color:var(--gold-soft)}
+    @media (prefers-reduced-motion:reduce){
+      *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+    }
+    @media (max-width:900px){
+      .hero-content{gap:38px}
+      .hero h1{font-size:clamp(64px,11vw,100px)}
+      .collection-card,.collection-card.small{min-height:590px}
+      .swatch{min-height:160px}
+    }
+    @media (max-width:600px){
+      .nav{padding:17px 20px}
+      .wordmark{font-size:19px;letter-spacing:.18em}
+      .hero{min-height:900px}
+      .hero-content{padding-top:100px;gap:34px}
+      .hero h1{font-size:clamp(58px,16vw,76px);line-height:.83}
+      .hero-seal{width:220px}
+      .section-head{margin-bottom:34px}
+      .collection-card,.collection-card.small{min-height:520px}
+      .collection-info{left:24px;right:24px;bottom:25px}
+      .collection-info h3{font-size:38px}
+      .swatch{min-height:140px}
+      .order{padding-top:100px;padding-bottom:100px}
+    }
   </style>
 </head>
 
@@ -450,7 +526,7 @@
           </div>
         </div>
         <div class="hero-seal">
-          <img src="indus-casa-logo.png" alt="Indus Casa logo — EST. 2024, Uttar Pradesh, India">
+          <img src="indus-casa-logo.png" alt="Indus Casa logo — EST. 2024, Uttar Pradesh, India" fetchpriority="high">
         </div>
       </div>
       <div class="scroll-note"><span></span>Scroll to discover</div>
@@ -476,7 +552,7 @@
 
       <div class="collection-grid">
         <a class="collection-card reveal" href="#pieces">
-          <img src="product-navy.png" alt="Indus Casa navy signature polo and shirt presentation">
+          <img src="product-navy.png" alt="Indus Casa navy signature polo and shirt presentation" loading="lazy" decoding="async">
           <div class="collection-info">
             <small>01 · The signature</small>
             <h3>Midnight Navy</h3>
@@ -484,7 +560,7 @@
           </div>
         </a>
         <a class="collection-card small reveal" href="#pieces">
-          <img src="product-white.png" alt="Indus Casa white signature polo and shirt presentation">
+          <img src="product-white.png" alt="Indus Casa white signature polo and shirt presentation" loading="lazy" decoding="async">
           <div class="collection-info">
             <small>02 · The classic</small>
             <h3>Pure White</h3>
@@ -506,7 +582,7 @@
       <div class="product-grid">
         <article class="product reveal">
           <div class="product-media">
-            <img src="product-navy-detail.png" alt="Indus Casa navy shirt">
+            <img src="product-navy-detail.png" alt="Indus Casa navy shirt" loading="lazy" decoding="async">
             <span class="product-badge">Signature</span>
           </div>
           <div class="product-info">
@@ -518,7 +594,7 @@
 
         <article class="product reveal">
           <div class="product-media">
-            <img src="product-white-detail.png" alt="Indus Casa white shirt">
+            <img src="product-white-detail.png" alt="Indus Casa white shirt" loading="lazy" decoding="async">
             <span class="product-badge">Essential</span>
           </div>
           <div class="product-info">
@@ -530,7 +606,7 @@
 
         <article class="product reveal">
           <div class="product-media">
-            <img src="product-beige.png" alt="Indus Casa beige shirt">
+            <img src="product-beige.png" alt="Indus Casa beige shirt" loading="lazy" decoding="async">
             <span class="product-badge">Neutral Edit</span>
           </div>
           <div class="product-info">
@@ -542,7 +618,7 @@
 
         <article class="product reveal">
           <div class="product-media">
-            <img src="product-lilac.png" alt="Indus Casa lilac shirt">
+            <img src="product-lilac.png" alt="Indus Casa lilac shirt" loading="lazy" decoding="async">
             <span class="product-badge">Statement</span>
           </div>
           <div class="product-info">
@@ -554,7 +630,7 @@
 
         <article class="product reveal">
           <div class="product-media">
-            <img src="product-cream.png" alt="Indus Casa cream shirt">
+            <img src="product-cream.png" alt="Indus Casa cream shirt" loading="lazy" decoding="async">
             <span class="product-badge">Luxe Neutral</span>
           </div>
           <div class="product-info">
@@ -566,7 +642,7 @@
 
         <article class="product reveal">
           <div class="product-media">
-            <img src="product-white.png" alt="Indus Casa white boxed shirt presentation">
+            <img src="product-white.png" alt="Indus Casa white boxed shirt presentation" loading="lazy" decoding="async">
             <span class="product-badge">Gift Ready</span>
           </div>
           <div class="product-info">
@@ -601,11 +677,11 @@
         <p>From midnight navy to soft lilac, discover a palette made for different moods and moments.</p>
       </div>
       <div class="swatches">
-        <div class="swatch reveal"><img src="product-navy.png" alt="Midnight navy"><span>Midnight Navy</span></div>
-        <div class="swatch reveal"><img src="product-white.png" alt="Pure white"><span>Pure White</span></div>
-        <div class="swatch reveal"><img src="product-beige.png" alt="Soft beige"><span>Soft Beige</span></div>
-        <div class="swatch reveal"><img src="product-lilac.png" alt="Soft lilac"><span>Soft Lilac</span></div>
-        <div class="swatch reveal"><img src="product-cream.png" alt="Ivory cream"><span>Ivory Cream</span></div>
+        <div class="swatch reveal"><img src="product-navy.png" alt="Midnight navy" loading="lazy" decoding="async"><span>Midnight Navy</span></div>
+        <div class="swatch reveal"><img src="product-white.png" alt="Pure white" loading="lazy" decoding="async"><span>Pure White</span></div>
+        <div class="swatch reveal"><img src="product-beige.png" alt="Soft beige" loading="lazy" decoding="async"><span>Soft Beige</span></div>
+        <div class="swatch reveal"><img src="product-lilac.png" alt="Soft lilac" loading="lazy" decoding="async"><span>Soft Lilac</span></div>
+        <div class="swatch reveal"><img src="product-cream.png" alt="Ivory cream" loading="lazy" decoding="async"><span>Ivory Cream</span></div>
       </div>
     </section>
 
