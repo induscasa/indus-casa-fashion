@@ -444,8 +444,31 @@
     .product-media{aspect-ratio:1/.98}
     .product-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 65%,rgba(0,0,0,.2));pointer-events:none}
     .product-info h3{font-size:31px}
+    .product-meta{display:flex;justify-content:space-between;gap:12px;margin:12px 0 14px;color:var(--muted);font-size:10px;letter-spacing:.04em}
+    .product-meta span:last-child{color:var(--gold-soft);text-align:right}
     .product-link{display:inline-flex;align-items:center;min-height:34px;border-bottom:1px solid var(--gold);transition:color .25s ease,border-color .25s ease}
     .product-link:hover{color:var(--white);border-color:var(--white)}
+    .detail-page{display:none;min-height:100svh;padding:150px 7vw 110px;background:linear-gradient(135deg,#07131d,#0d2231 58%,#102638)}
+    .detail-page.active{display:block;animation:detailIn .65s ease both}
+    @keyframes detailIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+    .detail-shell{width:min(1180px,100%);margin:auto}
+    .detail-back{display:inline-flex;margin-bottom:34px;color:var(--gold-soft);font-size:10px;letter-spacing:.22em;text-transform:uppercase;transition:color .25s ease}
+    .detail-back:hover{color:var(--white)}
+    .detail-layout{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(320px,.8fr);gap:clamp(42px,8vw,110px);align-items:center}
+    .detail-media{position:relative;background:#0d1d2c;border:1px solid rgba(234,211,155,.2);box-shadow:var(--shadow);overflow:hidden}
+    .detail-media::after{content:"";position:absolute;inset:14px;border:1px solid rgba(255,255,255,.17);pointer-events:none}
+    .detail-media img{width:100%;aspect-ratio:1/1.08;object-fit:cover;transition:opacity .35s ease}
+    .detail-copy .kicker{margin-bottom:17px}
+    .detail-copy h1{font-family:var(--serif);font-size:clamp(52px,6vw,86px);font-weight:500;line-height:.86;margin-bottom:21px}
+    .detail-description{max-width:470px;color:rgba(255,255,255,.7);font-size:13px;line-height:1.9;margin-bottom:27px}
+    .detail-meta{display:flex;gap:30px;padding:19px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:26px}
+    .detail-meta span{display:block;color:var(--muted);font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px}
+    .detail-meta strong{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--white)}
+    .detail-label{display:block;color:var(--gold-soft);font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:9px}
+    .size-select{width:100%;height:48px;padding:0 14px;border:1px solid rgba(234,211,155,.35);background:#0a1926;color:var(--white);font:inherit;font-size:11px;letter-spacing:.08em;cursor:pointer}
+    .detail-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+    .detail-actions .btn{flex:1;min-width:180px;cursor:pointer}
+    .detail-status{min-height:18px;margin-top:13px;color:var(--gold-soft);font-size:10px;letter-spacing:.08em}
     .story-image{background-position:center}
     .colour-bar{background:linear-gradient(135deg,#102b3b,#0d2231)}
     .swatch{min-height:190px}
@@ -478,7 +501,14 @@
       .collection-info h3{font-size:38px}
       .swatch{min-height:140px}
       .order{padding-top:100px;padding-bottom:100px}
+      .detail-page{padding:108px 6vw 78px}
+      .detail-layout{grid-template-columns:1fr;gap:38px}
+      .detail-copy h1{font-size:clamp(52px,15vw,75px)}
+      .detail-meta{gap:22px}
+      .detail-actions{display:grid}
+      .detail-actions .btn{width:100%}
     }
+    body.detail-view main>section:not(.detail-page),body.detail-view footer{display:none}
   </style>
 </head>
 
@@ -510,6 +540,32 @@
   </header>
 
   <main id="home">
+    <section class="detail-page" id="product-detail" aria-live="polite">
+      <div class="detail-shell">
+        <a class="detail-back" href="#pieces">← Back to Collection</a>
+        <div class="detail-layout">
+          <div class="detail-media"><img id="detail-image" src="product-navy-detail.png" alt="" decoding="async"></div>
+          <div class="detail-copy">
+            <div class="kicker">Signature piece</div>
+            <h1 id="detail-name">Navy Signature</h1>
+            <p class="detail-description" id="detail-description"></p>
+            <div class="detail-meta">
+              <div><span>Colour</span><strong id="detail-colour"></strong></div>
+              <div><span>Price</span><strong>On enquiry</strong></div>
+            </div>
+            <label class="detail-label" for="detail-size">Size</label>
+            <select class="size-select" id="detail-size">
+              <option value="">Select size</option>
+            </select>
+            <div class="detail-actions">
+              <button class="btn gold" id="add-to-cart" type="button">Add to Cart</button>
+              <a class="btn ghost" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Enquire on Instagram</a>
+            </div>
+            <p class="detail-status" id="detail-status" role="status"></p>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="hero">
       <div class="hero-bg" aria-hidden="true"></div>
       <div class="hero-content">
@@ -580,7 +636,7 @@
       </div>
 
       <div class="product-grid">
-        <article class="product reveal">
+        <article class="product reveal" data-product="navy-signature" tabindex="0">
           <div class="product-media">
             <img src="product-navy-detail.png" alt="Indus Casa navy shirt" loading="lazy" decoding="async">
             <span class="product-badge">Signature</span>
@@ -588,11 +644,12 @@
           <div class="product-info">
             <h3>Navy Signature</h3>
             <p>A rich navy expression with the Indus Casa gold mark.</p>
-            <a class="product-link" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Enquire on Instagram</a>
+            <div class="product-meta"><span>Colour: Midnight Navy</span><span>Price on enquiry</span></div>
+            <a class="product-link" href="#product/navy-signature" aria-label="View Navy Signature product">View Product</a>
           </div>
         </article>
 
-        <article class="product reveal">
+        <article class="product reveal" data-product="white-essential" tabindex="0">
           <div class="product-media">
             <img src="product-white-detail.png" alt="Indus Casa white shirt" loading="lazy" decoding="async">
             <span class="product-badge">Essential</span>
@@ -600,11 +657,12 @@
           <div class="product-info">
             <h3>White Essential</h3>
             <p>Minimal, crisp and built around a timeless neutral.</p>
-            <a class="product-link" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Enquire on Instagram</a>
+            <div class="product-meta"><span>Colour: Pure White</span><span>Price on enquiry</span></div>
+            <a class="product-link" href="#product/white-essential" aria-label="View White Essential product">View Product</a>
           </div>
         </article>
 
-        <article class="product reveal">
+        <article class="product reveal" data-product="soft-beige" tabindex="0">
           <div class="product-media">
             <img src="product-beige.png" alt="Indus Casa beige shirt" loading="lazy" decoding="async">
             <span class="product-badge">Neutral Edit</span>
@@ -612,11 +670,12 @@
           <div class="product-info">
             <h3>Soft Beige</h3>
             <p>Warm, refined and designed for understated presence.</p>
-            <a class="product-link" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Enquire on Instagram</a>
+            <div class="product-meta"><span>Colour: Soft Beige</span><span>Price on enquiry</span></div>
+            <a class="product-link" href="#product/soft-beige" aria-label="View Soft Beige product">View Product</a>
           </div>
         </article>
 
-        <article class="product reveal">
+        <article class="product reveal" data-product="soft-lilac" tabindex="0">
           <div class="product-media">
             <img src="product-lilac.png" alt="Indus Casa lilac shirt" loading="lazy" decoding="async">
             <span class="product-badge">Statement</span>
@@ -624,11 +683,12 @@
           <div class="product-info">
             <h3>Soft Lilac</h3>
             <p>A restrained colour statement with a premium finish.</p>
-            <a class="product-link" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Enquire on Instagram</a>
+            <div class="product-meta"><span>Colour: Soft Lilac</span><span>Price on enquiry</span></div>
+            <a class="product-link" href="#product/soft-lilac" aria-label="View Soft Lilac product">View Product</a>
           </div>
         </article>
 
-        <article class="product reveal">
+        <article class="product reveal" data-product="ivory-cream" tabindex="0">
           <div class="product-media">
             <img src="product-cream.png" alt="Indus Casa cream shirt" loading="lazy" decoding="async">
             <span class="product-badge">Luxe Neutral</span>
@@ -636,11 +696,12 @@
           <div class="product-info">
             <h3>Ivory Cream</h3>
             <p>Soft tonal dressing with a warm, elegant character.</p>
-            <a class="product-link" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Enquire on Instagram</a>
+            <div class="product-meta"><span>Colour: Ivory Cream</span><span>Price on enquiry</span></div>
+            <a class="product-link" href="#product/ivory-cream" aria-label="View Ivory Cream product">View Product</a>
           </div>
         </article>
 
-        <article class="product reveal">
+        <article class="product reveal" data-product="white-box" tabindex="0">
           <div class="product-media">
             <img src="product-white.png" alt="Indus Casa white boxed shirt presentation" loading="lazy" decoding="async">
             <span class="product-badge">Gift Ready</span>
@@ -648,7 +709,8 @@
           <div class="product-info">
             <h3>The White Box</h3>
             <p>Presented with the signature Indus Casa packaging aesthetic.</p>
-            <a class="product-link" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Enquire on Instagram</a>
+            <div class="product-meta"><span>Colour: Pure White</span><span>Price on enquiry</span></div>
+            <a class="product-link" href="#product/white-box" aria-label="View The White Box product">View Product</a>
           </div>
         </article>
       </div>
@@ -727,6 +789,61 @@
     const progress = document.getElementById('progress');
     const menuToggle = document.getElementById('menuToggle');
     const mobileNav = document.getElementById('mobileNav');
+    const detailPage = document.getElementById('product-detail');
+    const detailImage = document.getElementById('detail-image');
+    const detailName = document.getElementById('detail-name');
+    const detailDescription = document.getElementById('detail-description');
+    const detailColour = document.getElementById('detail-colour');
+    const detailSize = document.getElementById('detail-size');
+    const detailStatus = document.getElementById('detail-status');
+
+    const products = {
+      'navy-signature': {name:'Navy Signature', colour:'Midnight Navy', image:'product-navy-detail.png', description:'A rich navy expression with the Indus Casa gold mark, composed for quiet confidence and everyday ease.'},
+      'white-essential': {name:'White Essential', colour:'Pure White', image:'product-white-detail.png', description:'Minimal, crisp and built around a timeless neutral with an unmistakably polished presence.'},
+      'soft-beige': {name:'Soft Beige', colour:'Soft Beige', image:'product-beige.png', description:'Warm and refined, a softly considered tone for moments that call for understated presence.'},
+      'soft-lilac': {name:'Soft Lilac', colour:'Soft Lilac', image:'product-lilac.png', description:'A restrained colour statement with a composed character and the ease of modern dressing.'},
+      'ivory-cream': {name:'Ivory Cream', colour:'Ivory Cream', image:'product-cream.png', description:'Soft tonal dressing with a warm, elegant character made to move quietly through the day.'},
+      'white-box': {name:'The White Box', colour:'Pure White', image:'product-white.png', description:'The signature Indus Casa presentation, offered as a considered expression of the white essential.'}
+    };
+
+    function showProduct(slug){
+      const product = products[slug];
+      if(!product){
+        document.body.classList.remove('detail-view');
+        detailPage.classList.remove('active');
+        return;
+      }
+      document.body.classList.add('detail-view');
+      detailPage.classList.add('active');
+      detailImage.src = product.image;
+      detailImage.alt = `Indus Casa ${product.name}`;
+      detailName.textContent = product.name;
+      detailDescription.textContent = product.description;
+      detailColour.textContent = product.colour;
+      detailSize.value = '';
+      detailStatus.textContent = '';
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function syncProductView(){
+      const slug = window.location.hash.startsWith('#product/') ? window.location.hash.slice(9) : '';
+      showProduct(slug);
+    }
+    document.querySelectorAll('.product[data-product]').forEach(card=>{
+      const open = ()=>{ window.location.hash = `product/${card.dataset.product}`; };
+      card.addEventListener('click', event=>{
+        if(event.target.closest('a')) return;
+        open();
+      });
+      card.addEventListener('keydown', event=>{
+        if(event.key === 'Enter' || event.key === ' '){ event.preventDefault(); open(); }
+      });
+    });
+    document.getElementById('add-to-cart').addEventListener('click', ()=>{
+      detailStatus.textContent = detailSize.value ? 'Added to your enquiry list.' : 'Please select a size.';
+    });
+    window.addEventListener('hashchange', syncProductView);
+    syncProductView();
 
     function closeMobileNav(){
       mobileNav.classList.remove('open');
