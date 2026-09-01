@@ -466,9 +466,38 @@
     .detail-meta strong{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--white)}
     .detail-label{display:block;color:var(--gold-soft);font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:9px}
     .size-select{width:100%;height:48px;padding:0 14px;border:1px solid rgba(234,211,155,.35);background:#0a1926;color:var(--white);font:inherit;font-size:11px;letter-spacing:.08em;cursor:pointer}
+    .size-select option{background:#0a1926;color:var(--white)}
     .detail-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
     .detail-actions .btn{flex:1;min-width:180px;cursor:pointer}
     .detail-status{min-height:18px;margin-top:13px;color:var(--gold-soft);font-size:10px;letter-spacing:.08em}
+    .cart-toggle{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:var(--white);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:color .25s ease}
+    .cart-toggle:hover{color:var(--gold-soft)}
+    .cart-count{min-width:20px;height:20px;padding:0 5px;display:inline-grid;place-items:center;border:1px solid var(--gold);border-radius:50%;color:var(--gold-soft);font-size:9px;letter-spacing:0}
+    .cart-overlay{position:fixed;inset:0;z-index:960;background:rgba(0,0,0,.58);opacity:0;visibility:hidden;transition:opacity .3s ease,visibility .3s ease}
+    .cart-overlay.open{opacity:1;visibility:visible}
+    .cart-drawer{position:absolute;top:0;right:0;width:min(440px,100%);height:100%;padding:30px;display:flex;flex-direction:column;background:var(--navy-2);border-left:1px solid var(--line);box-shadow:-25px 0 70px rgba(0,0,0,.35);transform:translateX(100%);transition:transform .4s cubic-bezier(.2,.65,.2,1)}
+    .cart-overlay.open .cart-drawer{transform:none}
+    .cart-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:22px;border-bottom:1px solid var(--line)}
+    .cart-head h2{font-family:var(--serif);font-size:39px;font-weight:500}
+    .cart-close{width:34px;height:34px;border:1px solid rgba(234,211,155,.4);background:transparent;color:var(--white);font-size:21px;line-height:1;cursor:pointer;transition:.25s}
+    .cart-close:hover{background:var(--gold);color:var(--navy)}
+    .cart-items{flex:1;overflow:auto;padding:20px 0}
+    .cart-empty{color:var(--muted);font-size:12px;line-height:1.8}
+    .cart-item{display:grid;grid-template-columns:72px 1fr auto;gap:14px;align-items:center;padding:0 0 18px;margin-bottom:18px;border-bottom:1px solid rgba(234,211,155,.14)}
+    .cart-item img{width:72px;height:82px;object-fit:cover;background:var(--navy-3)}
+    .cart-item h3{font-family:var(--serif);font-size:23px;font-weight:500}
+    .cart-item p{margin-top:4px;color:var(--muted);font-size:10px;letter-spacing:.08em}
+    .cart-quantity{display:flex;align-items:center;gap:8px;margin-top:11px}
+    .quantity-button{width:24px;height:24px;border:1px solid rgba(234,211,155,.4);background:transparent;color:var(--white);cursor:pointer}
+    .quantity-button:hover{background:var(--gold);color:var(--navy)}
+    .cart-quantity span{min-width:14px;text-align:center;font-size:11px}
+    .cart-remove{margin-top:8px;border:0;background:transparent;color:var(--gold-soft);font-size:9px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
+    .cart-remove:hover{color:var(--white)}
+    .cart-total{display:flex;justify-content:space-between;padding:18px 0;border-top:1px solid var(--line);color:var(--muted);font-size:10px;letter-spacing:.15em;text-transform:uppercase}
+    .cart-total strong{color:var(--gold-soft);font-weight:500}
+    .cart-actions{display:grid;gap:10px}
+    .cart-actions .btn{width:100%;cursor:pointer}
+    body.cart-open{overflow:hidden}
     .story-image{background-position:center}
     .colour-bar{background:linear-gradient(135deg,#102b3b,#0d2231)}
     .swatch{min-height:190px}
@@ -507,6 +536,9 @@
       .detail-meta{gap:22px}
       .detail-actions{display:grid}
       .detail-actions .btn{width:100%}
+      .cart-toggle{font-size:0;letter-spacing:0}
+      .cart-toggle::before{content:"Cart";font-size:10px;letter-spacing:.16em}
+      .cart-drawer{padding:24px 20px}
     }
     body.detail-view main>section:not(.detail-page),body.detail-view footer{display:none}
   </style>
@@ -526,6 +558,7 @@
       </ul>
     </nav>
     <div class="nav-actions">
+      <button class="cart-toggle" id="cartToggle" type="button" aria-label="Open shopping cart">My Cart <span class="cart-count" id="cartCount">0</span></button>
       <a class="nav-instagram" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener" aria-label="Indus Casa on Instagram">
         <span aria-hidden="true">◎</span>
       </a>
@@ -538,6 +571,21 @@
       <a href="#order">Enquire</a>
     </div>
   </header>
+
+  <div class="cart-overlay" id="cartOverlay" aria-hidden="true">
+    <aside class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+      <div class="cart-head">
+        <h2 id="cartTitle">My Cart</h2>
+        <button class="cart-close" id="cartClose" type="button" aria-label="Close cart">×</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-total"><span>Total items</span><strong id="cartTotal">0</strong></div>
+      <div class="cart-actions">
+        <a class="btn gold" id="cartCheckout" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Proceed to Enquiry / Checkout</a>
+        <button class="btn ghost" id="continueShopping" type="button">Continue Shopping</button>
+      </div>
+    </aside>
+  </div>
 
   <main id="home">
     <section class="detail-page" id="product-detail" aria-live="polite">
@@ -796,15 +844,101 @@
     const detailColour = document.getElementById('detail-colour');
     const detailSize = document.getElementById('detail-size');
     const detailStatus = document.getElementById('detail-status');
+    const addToCartButton = document.getElementById('add-to-cart');
+    const cartToggle = document.getElementById('cartToggle');
+    const cartCount = document.getElementById('cartCount');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartClose = document.getElementById('cartClose');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    const continueShopping = document.getElementById('continueShopping');
+    const cartStorageKey = 'indus-casa-cart';
+    let currentProductSlug = '';
 
     const products = {
-      'navy-signature': {name:'Navy Signature', colour:'Midnight Navy', image:'product-navy-detail.png', description:'A rich navy expression with the Indus Casa gold mark, composed for quiet confidence and everyday ease.'},
-      'white-essential': {name:'White Essential', colour:'Pure White', image:'product-white-detail.png', description:'Minimal, crisp and built around a timeless neutral with an unmistakably polished presence.'},
-      'soft-beige': {name:'Soft Beige', colour:'Soft Beige', image:'product-beige.png', description:'Warm and refined, a softly considered tone for moments that call for understated presence.'},
-      'soft-lilac': {name:'Soft Lilac', colour:'Soft Lilac', image:'product-lilac.png', description:'A restrained colour statement with a composed character and the ease of modern dressing.'},
-      'ivory-cream': {name:'Ivory Cream', colour:'Ivory Cream', image:'product-cream.png', description:'Soft tonal dressing with a warm, elegant character made to move quietly through the day.'},
-      'white-box': {name:'The White Box', colour:'Pure White', image:'product-white.png', description:'The signature Indus Casa presentation, offered as a considered expression of the white essential.'}
+      'navy-signature': {name:'Navy Signature', colour:'Midnight Navy', image:'product-navy-detail.png', sizes:['S','M','L','XL'], description:'A rich navy expression with the Indus Casa gold mark, composed for quiet confidence and everyday ease.'},
+      'white-essential': {name:'White Essential', colour:'Pure White', image:'product-white-detail.png', sizes:['S','M','L','XL'], description:'Minimal, crisp and built around a timeless neutral with an unmistakably polished presence.'},
+      'soft-beige': {name:'Soft Beige', colour:'Soft Beige', image:'product-beige.png', sizes:['S','M','L','XL'], description:'Warm and refined, a softly considered tone for moments that call for understated presence.'},
+      'soft-lilac': {name:'Soft Lilac', colour:'Soft Lilac', image:'product-lilac.png', sizes:['S','M','L','XL'], description:'A restrained colour statement with a composed character and the ease of modern dressing.'},
+      'ivory-cream': {name:'Ivory Cream', colour:'Ivory Cream', image:'product-cream.png', sizes:['S','M','L','XL'], description:'Soft tonal dressing with a warm, elegant character made to move quietly through the day.'},
+      'white-box': {name:'The White Box', colour:'Pure White', image:'product-white.png', sizes:['S','M','L','XL'], description:'The signature Indus Casa presentation, offered as a considered expression of the white essential.'}
     };
+    let cart = loadCart();
+
+    function loadCart(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(cartStorageKey) || '[]');
+        return Array.isArray(saved) ? saved.filter(item=>item && products[item.slug] && products[item.slug].sizes.includes(item.size) && Number.isInteger(item.quantity) && item.quantity > 0) : [];
+      }catch(error){
+        return [];
+      }
+    }
+
+    function saveCart(){
+      localStorage.setItem(cartStorageKey, JSON.stringify(cart));
+      renderCart();
+    }
+
+    function cartItemCount(){
+      return cart.reduce((total, item)=>total + item.quantity, 0);
+    }
+
+    function renderCart(){
+      const total = cartItemCount();
+      cartCount.textContent = total;
+      cartToggle.setAttribute('aria-label', `Open shopping cart, ${total} item${total === 1 ? '' : 's'}`);
+      cartTotal.textContent = total;
+      if(!cart.length){
+        cartItems.innerHTML = '<p class="cart-empty">Your cart is currently empty.</p>';
+        return;
+      }
+      cartItems.innerHTML = cart.map(item=>{
+        const product = products[item.slug];
+        return `<div class="cart-item" data-cart-key="${item.slug}|${item.size}">
+          <img src="${product.image}" alt="${product.name}">
+          <div><h3>${product.name}</h3><p>Size: ${item.size}</p>
+            <div class="cart-quantity"><button class="quantity-button" type="button" data-action="decrease" aria-label="Decrease ${product.name} quantity">−</button><span>${item.quantity}</span><button class="quantity-button" type="button" data-action="increase" aria-label="Increase ${product.name} quantity">+</button></div>
+            <button class="cart-remove" type="button" data-action="remove">Remove</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function openCart(){
+      renderCart();
+      cartOverlay.classList.add('open');
+      cartOverlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('cart-open');
+      cartClose.focus();
+    }
+
+    function closeCart(){
+      cartOverlay.classList.remove('open');
+      cartOverlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('cart-open');
+    }
+
+    function updateAddToCartState(){
+      const hasSelection = detailSize.value !== '' && Boolean(currentProductSlug);
+      addToCartButton.disabled = !hasSelection;
+      addToCartButton.setAttribute('aria-disabled', String(!hasSelection));
+    }
+
+    function addToCart(){
+      const size = detailSize.value;
+      if(!size){
+        detailStatus.textContent = 'Please select a size.';
+        detailSize.focus();
+        updateAddToCartState();
+        return;
+      }
+      const existing = cart.find(item=>item.slug === currentProductSlug && item.size === size);
+      if(existing) existing.quantity += 1;
+      else cart.push({slug:currentProductSlug, size, quantity:1});
+      saveCart();
+      detailStatus.textContent = 'Added to cart.';
+      openCart();
+    }
 
     function showProduct(slug){
       const product = products[slug];
@@ -813,6 +947,7 @@
         detailPage.classList.remove('active');
         return;
       }
+      currentProductSlug = slug;
       document.body.classList.add('detail-view');
       detailPage.classList.add('active');
       detailImage.src = product.image;
@@ -820,8 +955,11 @@
       detailName.textContent = product.name;
       detailDescription.textContent = product.description;
       detailColour.textContent = product.colour;
+      detailSize.replaceChildren(new Option('Select size', ''));
+      product.sizes.forEach(size=>detailSize.add(new Option(size, size)));
       detailSize.value = '';
       detailStatus.textContent = '';
+      updateAddToCartState();
       window.scrollTo({top:0, behavior:'smooth'});
     }
 
@@ -839,9 +977,34 @@
         if(event.key === 'Enter' || event.key === ' '){ event.preventDefault(); open(); }
       });
     });
-    document.getElementById('add-to-cart').addEventListener('click', ()=>{
-      detailStatus.textContent = detailSize.value ? 'Added to your enquiry list.' : 'Please select a size.';
+    cartToggle.addEventListener('click', openCart);
+    cartClose.addEventListener('click', closeCart);
+    continueShopping.addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', event=>{
+      if(event.target === cartOverlay) closeCart();
     });
+    cartItems.addEventListener('click', event=>{
+      const action = event.target.dataset.action;
+      if(!action) return;
+      const itemElement = event.target.closest('[data-cart-key]');
+      const [slug, size] = itemElement.dataset.cartKey.split('|');
+      const item = cart.find(entry=>entry.slug === slug && entry.size === size);
+      if(!item) return;
+      if(action === 'increase') item.quantity += 1;
+      if(action === 'decrease') item.quantity -= 1;
+      if(action === 'remove' || item.quantity < 1) cart = cart.filter(entry=>entry !== item);
+      saveCart();
+    });
+    detailSize.addEventListener('change', ()=>{
+      detailStatus.textContent = '';
+      updateAddToCartState();
+    });
+    addToCartButton.addEventListener('click', addToCart);
+    updateAddToCartState();
+    document.addEventListener('keydown', event=>{
+      if(event.key === 'Escape' && cartOverlay.classList.contains('open')) closeCart();
+    });
+    renderCart();
     window.addEventListener('hashchange', syncProductView);
     syncProductView();
 
