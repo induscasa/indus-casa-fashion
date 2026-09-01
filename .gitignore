@@ -4,6 +4,7 @@ package.json
 test-results/
 tests/
 playwright-report/
+playwright/
 playwright/.cache/
 *.log
 .DS_Store
