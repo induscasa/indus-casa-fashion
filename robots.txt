@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://induscasa.github.io/indus-casa-fashion/sitemap.xml
