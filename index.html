@@ -250,6 +250,13 @@
     .product-info{padding:21px}
     .product-info h3{font-family:var(--serif);font-size:28px;font-weight:500}
     .product-info p{color:var(--muted);font-size:11px;line-height:1.7;margin:5px 0 16px}
+    .product-price{margin-top:14px;padding-top:12px;border-top:1px solid rgba(234,211,155,.14)}
+    .product-price-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+    .market-price{color:rgba(255,255,255,.48);font-size:12px;text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:rgba(234,211,155,.7)}
+    .discount-badge{display:inline-flex;align-items:center;justify-content:center;padding:5px 8px;background:rgba(202,164,90,.12);border:1px solid rgba(234,211,155,.32);color:var(--gold-soft);font-size:8px;letter-spacing:.14em;text-transform:uppercase}
+    .product-price-main{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+    .product-price-main strong{font-family:var(--serif);font-size:28px;font-weight:500;color:var(--white)}
+    .product-price-main small{color:var(--gold-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase}
     .product-link{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft)}
     .product-link::after{content:"  →";transition:.25s}
     .product:hover .product-link::after{margin-left:4px}
@@ -464,6 +471,13 @@
     .detail-meta{display:flex;gap:30px;padding:19px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:26px}
     .detail-meta span{display:block;color:var(--muted);font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px}
     .detail-meta strong{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--white)}
+    .detail-pricing{margin:22px 0 18px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .detail-price-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+    .detail-market-price{color:rgba(255,255,255,.45);font-size:14px;text-decoration:line-through;text-decoration-thickness:1.5px;text-decoration-color:rgba(234,211,155,.7)}
+    .detail-discount-badge{display:inline-flex;align-items:center;padding:5px 8px;background:rgba(202,164,90,.12);border:1px solid rgba(234,211,155,.32);color:var(--gold-soft);font-size:8px;letter-spacing:.14em;text-transform:uppercase}
+    .detail-price-main{display:flex;align-items:baseline;justify-content:space-between;gap:14px}
+    .detail-selling-price{font-family:var(--serif);font-size:32px;font-weight:500;color:var(--white)}
+    .detail-price-save{color:var(--gold-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase}
     .detail-label{display:block;color:var(--gold-soft);font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:9px}
     .size-select{width:100%;height:48px;padding:0 14px;border:1px solid rgba(234,211,155,.35);background:#0a1926;color:var(--white);font:inherit;font-size:11px;letter-spacing:.08em;cursor:pointer}
     .size-select option{background:#0a1926;color:var(--white)}
@@ -487,6 +501,10 @@
     .cart-item img{width:72px;height:82px;object-fit:cover;background:var(--navy-3)}
     .cart-item h3{font-family:var(--serif);font-size:23px;font-weight:500}
     .cart-item p{margin-top:4px;color:var(--muted);font-size:10px;letter-spacing:.08em}
+    .cart-price{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+    .cart-market-price{color:rgba(255,255,255,.46);font-size:10px;text-decoration:line-through;text-decoration-color:rgba(234,211,155,.7)}
+    .cart-selling-price{color:var(--white);font-size:12px}
+    .cart-discount{color:var(--gold-soft);font-size:9px;letter-spacing:.08em;text-transform:uppercase}
     .cart-quantity{display:flex;align-items:center;gap:8px;margin-top:11px}
     .quantity-button{width:24px;height:24px;border:1px solid rgba(234,211,155,.4);background:transparent;color:var(--white);cursor:pointer}
     .quantity-button:hover{background:var(--gold);color:var(--navy)}
@@ -497,6 +515,58 @@
     .cart-total strong{color:var(--gold-soft);font-weight:500}
     .cart-actions{display:grid;gap:10px}
     .cart-actions .btn{width:100%;cursor:pointer}
+    .checkout-modal{position:fixed;inset:0;z-index:980;background:rgba(3,8,13,.72);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease;display:flex;align-items:center;justify-content:center;padding:24px}
+    .checkout-modal.open{opacity:1;visibility:visible}
+    .checkout-shell{width:min(980px,100%);max-height:92vh;overflow:auto;background:#0d1d2c;border:1px solid var(--line);box-shadow:var(--shadow);padding:24px 24px 18px}
+    .checkout-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+    .checkout-head h2{font-family:var(--serif);font-size:clamp(34px,4vw,48px);font-weight:500}
+    .checkout-close{width:36px;height:36px;border:1px solid rgba(234,211,155,.42);background:transparent;color:var(--white);cursor:pointer}
+    .checkout-layout{display:grid;grid-template-columns:1.08fr .92fr;gap:26px}
+    .checkout-panel{background:rgba(255,255,255,.02);border:1px solid rgba(234,211,155,.12);padding:20px}
+    .checkout-panel h3{font-family:var(--serif);font-size:28px;font-weight:500;margin-bottom:14px}
+    .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+    .field.full{grid-column:1 / -1}
+    .field label{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-soft)}
+    .field input,.field textarea,.field select{width:100%;min-height:46px;border:1px solid rgba(234,211,155,.28);background:rgba(5,12,18,.75);color:var(--white);padding:12px 14px;font:inherit}
+    .field textarea{min-height:94px;resize:vertical}
+    .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 2px rgba(202,164,90,.18)}
+    .field input[aria-invalid='true'],.field textarea[aria-invalid='true'],.field select[aria-invalid='true']{border-color:#f18b8b;box-shadow:0 0 0 2px rgba(241,139,139,.12)}
+    .field-error{min-height:16px;font-size:11px;color:#f4bfbd}
+    .payment-options{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
+    .payment-option{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid rgba(234,211,155,.24);background:rgba(5,12,18,.4);cursor:pointer;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--white)}
+    .payment-option input{accent-color:var(--gold);width:16px;height:16px}
+    .checkout-summary-list{display:grid;gap:12px}
+    .checkout-item{display:grid;grid-template-columns:54px 1fr auto;gap:12px;padding-bottom:12px;border-bottom:1px solid rgba(234,211,155,.14)}
+    .checkout-item img{width:54px;height:60px;object-fit:cover;background:#12263a}
+    .checkout-item h4{font-family:var(--serif);font-size:24px;font-weight:500}
+    .checkout-item p{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+    .checkout-amounts{padding-top:18px;display:grid;gap:10px}
+    .checkout-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+    .checkout-row strong{color:var(--white);font-size:13px;letter-spacing:.04em;text-transform:none}
+    .checkout-row.total{padding-top:12px;border-top:1px solid var(--line)}
+    .checkout-row.total strong{color:var(--gold-soft);font-size:26px;font-family:var(--serif);font-weight:500;letter-spacing:0}
+    .checkout-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:18px}
+    .checkout-actions .btn{cursor:pointer}
+    .checkout-status{min-height:20px;margin-top:14px;color:#f4bfbd;font-size:12px}
+    .checkout-confirmation{display:none;padding:24px;background:rgba(255,255,255,.02);border:1px solid rgba(234,211,155,.12)}
+    .checkout-confirmation.visible{display:block}
+    .confirmation-badge{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;background:rgba(202,164,90,.12);border:1px solid rgba(202,164,90,.38);color:var(--gold-soft);font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:18px}
+    .confirmation-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+    .confirmation-block{background:rgba(5,12,18,.45);padding:16px;border:1px solid rgba(234,211,155,.12)}
+    .confirmation-block h4{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:8px}
+    .confirmation-block strong{font-size:22px;font-family:var(--serif);font-weight:500}
+    .confirmation-message{margin-top:20px;font-size:14px;line-height:1.8;color:var(--muted)}
+    .confirmation-message strong{color:var(--gold-soft)}
+    @media (max-width:760px){
+      .checkout-layout{grid-template-columns:1fr}
+      .field-grid{grid-template-columns:1fr}
+      .payment-options{grid-template-columns:1fr}
+      .checkout-shell{padding:18px 18px 14px}
+      .checkout-head{padding-bottom:12px}
+      .checkout-actions{flex-direction:column}
+      .checkout-actions .btn{width:100%}
+    }
     body.cart-open{overflow:hidden}
     .story-image{background-position:center}
     .colour-bar{background:linear-gradient(135deg,#102b3b,#0d2231)}
@@ -579,12 +649,135 @@
         <button class="cart-close" id="cartClose" type="button" aria-label="Close cart">×</button>
       </div>
       <div class="cart-items" id="cartItems"></div>
-      <div class="cart-total"><span>Total items</span><strong id="cartTotal">0</strong></div>
+      <div class="cart-total"><span id="cartTotalLabel">Total</span><strong id="cartTotal">₹0</strong></div>
       <div class="cart-actions">
-        <a class="btn gold" id="cartCheckout" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Proceed to Enquiry / Checkout</a>
+        <button class="btn gold" id="cartCheckout" type="button">Proceed to Enquiry / Checkout</button>
         <button class="btn ghost" id="continueShopping" type="button">Continue Shopping</button>
       </div>
     </aside>
+  </div>
+
+  <div class="checkout-modal" id="checkoutModal" aria-hidden="true">
+    <div class="checkout-shell" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+      <div class="checkout-head">
+        <h2 id="checkoutTitle">Enquiry / Checkout</h2>
+        <button class="checkout-close" id="checkoutClose" type="button" aria-label="Close checkout">×</button>
+      </div>
+
+      <div id="checkoutFormView">
+        <form id="checkoutForm" novalidate>
+          <div class="checkout-layout">
+            <div class="checkout-panel">
+              <h3>Customer details</h3>
+              <div class="field-grid">
+                <div class="field full">
+                  <label for="checkoutFullName">Full Name</label>
+                  <input id="checkoutFullName" name="fullName" type="text" autocomplete="name" aria-invalid="false" />
+                  <span class="field-error" id="error-fullName"></span>
+                </div>
+
+                <div class="field">
+                  <label for="checkoutMobile">Mobile Number</label>
+                  <input id="checkoutMobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" aria-invalid="false" />
+                  <span class="field-error" id="error-mobile"></span>
+                </div>
+
+                <div class="field">
+                  <label for="checkoutEmail">Email Address</label>
+                  <input id="checkoutEmail" name="email" type="email" autocomplete="email" aria-invalid="false" />
+                  <span class="field-error" id="error-email"></span>
+                </div>
+
+                <div class="field full">
+                  <label for="checkoutAddress">Delivery Address</label>
+                  <textarea id="checkoutAddress" name="address" autocomplete="street-address" aria-invalid="false"></textarea>
+                  <span class="field-error" id="error-address"></span>
+                </div>
+
+                <div class="field">
+                  <label for="checkoutCity">City</label>
+                  <input id="checkoutCity" name="city" type="text" autocomplete="address-level2" aria-invalid="false" />
+                  <span class="field-error" id="error-city"></span>
+                </div>
+
+                <div class="field">
+                  <label for="checkoutState">State</label>
+                  <input id="checkoutState" name="state" type="text" autocomplete="address-level1" aria-invalid="false" />
+                  <span class="field-error" id="error-state"></span>
+                </div>
+
+                <div class="field">
+                  <label for="checkoutPin">PIN Code</label>
+                  <input id="checkoutPin" name="pin" type="text" inputmode="numeric" autocomplete="postal-code" aria-invalid="false" />
+                  <span class="field-error" id="error-pin"></span>
+                </div>
+              </div>
+
+              <div class="field" style="margin-top: 10px;">
+                <label>Payment Method</label>
+                <div class="payment-options" role="radiogroup" aria-label="Select a payment method">
+                  <label class="payment-option"><input type="radio" name="paymentMethod" value="UPI" /> <span>UPI</span></label>
+                  <label class="payment-option"><input type="radio" name="paymentMethod" value="Cash on Delivery" /> <span>Cash on Delivery</span></label>
+                  <label class="payment-option"><input type="radio" name="paymentMethod" value="Bank Transfer" /> <span>Bank Transfer</span></label>
+                </div>
+                <span class="field-error" id="error-payment"></span>
+              </div>
+            </div>
+
+            <div class="checkout-panel">
+              <h3>Order summary</h3>
+              <div id="checkoutItems" class="checkout-summary-list"></div>
+              <div class="checkout-amounts">
+                <div class="checkout-row"><span>Market Price</span><strong id="checkoutMarketTotal">₹0</strong></div>
+                <div class="checkout-row"><span>Discount</span><strong id="checkoutDiscountTotal">₹0</strong></div>
+                <div class="checkout-row total"><span>Total Amount</span><strong id="checkoutGrandTotal">₹0</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="checkout-actions">
+            <button class="btn ghost" id="checkoutBack" type="button">Back to Cart</button>
+            <button class="btn gold" id="placeOrderButton" type="submit">Place Enquiry / Place Order</button>
+          </div>
+          <div class="checkout-status" id="checkoutStatus" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <div class="checkout-confirmation" id="checkoutConfirmation" aria-live="polite">
+        <div class="confirmation-badge">Enquiry placed</div>
+        <h3 style="font-family: var(--serif); font-size: clamp(34px,4vw,50px); font-weight:500; margin-bottom: 12px;">Thank you for your enquiry.</h3>
+        <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">Your request has been recorded with the following reference and will be reviewed by the Indus Casa team.</p>
+
+        <div class="confirmation-grid">
+          <div class="confirmation-block">
+            <h4>Reference</h4>
+            <strong id="confirmationReference">IC-000000</strong>
+          </div>
+          <div class="confirmation-block">
+            <h4>Total amount</h4>
+            <strong id="confirmationTotal">₹0</strong>
+          </div>
+        </div>
+
+        <div class="confirmation-block" style="margin-bottom: 18px;">
+          <h4>Payment method</h4>
+          <strong id="confirmationPayment">UPI</strong>
+        </div>
+
+        <div class="confirmation-block">
+          <h4>Product details</h4>
+          <div id="confirmationItems" style="display:grid; gap:12px; margin-top:12px;"></div>
+        </div>
+
+        <div class="confirmation-message">
+          <strong>Confirmation:</strong> This is an enquiry/checkout request only. No real payment has been processed at this stage, and the selected payment method will be confirmed directly with the team.
+        </div>
+
+        <div class="checkout-actions" style="justify-content:flex-start; margin-top: 24px;">
+          <button class="btn gold" id="confirmationClose" type="button">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <main id="home">
@@ -599,8 +792,8 @@
             <p class="detail-description" id="detail-description"></p>
             <div class="detail-meta">
               <div><span>Colour</span><strong id="detail-colour"></strong></div>
-              <div><span>Price</span><strong>On enquiry</strong></div>
             </div>
+            <div class="detail-pricing" id="detail-pricing" aria-live="polite"></div>
             <label class="detail-label" for="detail-size">Size</label>
             <select class="size-select" id="detail-size">
               <option value="">Select size</option>
@@ -692,7 +885,7 @@
           <div class="product-info">
             <h3>Navy Signature</h3>
             <p>A rich navy expression with the Indus Casa gold mark.</p>
-            <div class="product-meta"><span>Colour: Midnight Navy</span><span>Price on enquiry</span></div>
+            <div class="product-meta"><span>Colour: Midnight Navy</span></div>
             <a class="product-link" href="#product/navy-signature" aria-label="View Navy Signature product">View Product</a>
           </div>
         </article>
@@ -705,7 +898,7 @@
           <div class="product-info">
             <h3>White Essential</h3>
             <p>Minimal, crisp and built around a timeless neutral.</p>
-            <div class="product-meta"><span>Colour: Pure White</span><span>Price on enquiry</span></div>
+            <div class="product-meta"><span>Colour: Pure White</span></div>
             <a class="product-link" href="#product/white-essential" aria-label="View White Essential product">View Product</a>
           </div>
         </article>
@@ -718,7 +911,7 @@
           <div class="product-info">
             <h3>Soft Beige</h3>
             <p>Warm, refined and designed for understated presence.</p>
-            <div class="product-meta"><span>Colour: Soft Beige</span><span>Price on enquiry</span></div>
+            <div class="product-meta"><span>Colour: Soft Beige</span></div>
             <a class="product-link" href="#product/soft-beige" aria-label="View Soft Beige product">View Product</a>
           </div>
         </article>
@@ -731,7 +924,7 @@
           <div class="product-info">
             <h3>Soft Lilac</h3>
             <p>A restrained colour statement with a premium finish.</p>
-            <div class="product-meta"><span>Colour: Soft Lilac</span><span>Price on enquiry</span></div>
+            <div class="product-meta"><span>Colour: Soft Lilac</span></div>
             <a class="product-link" href="#product/soft-lilac" aria-label="View Soft Lilac product">View Product</a>
           </div>
         </article>
@@ -744,7 +937,7 @@
           <div class="product-info">
             <h3>Ivory Cream</h3>
             <p>Soft tonal dressing with a warm, elegant character.</p>
-            <div class="product-meta"><span>Colour: Ivory Cream</span><span>Price on enquiry</span></div>
+            <div class="product-meta"><span>Colour: Ivory Cream</span></div>
             <a class="product-link" href="#product/ivory-cream" aria-label="View Ivory Cream product">View Product</a>
           </div>
         </article>
@@ -757,7 +950,7 @@
           <div class="product-info">
             <h3>The White Box</h3>
             <p>Presented with the signature Indus Casa packaging aesthetic.</p>
-            <div class="product-meta"><span>Colour: Pure White</span><span>Price on enquiry</span></div>
+            <div class="product-meta"><span>Colour: Pure White</span></div>
             <a class="product-link" href="#product/white-box" aria-label="View The White Box product">View Product</a>
           </div>
         </article>
@@ -842,6 +1035,7 @@
     const detailName = document.getElementById('detail-name');
     const detailDescription = document.getElementById('detail-description');
     const detailColour = document.getElementById('detail-colour');
+    const detailPricing = document.getElementById('detail-pricing');
     const detailSize = document.getElementById('detail-size');
     const detailStatus = document.getElementById('detail-status');
     const addToCartButton = document.getElementById('add-to-cart');
@@ -849,19 +1043,38 @@
     const cartCount = document.getElementById('cartCount');
     const cartOverlay = document.getElementById('cartOverlay');
     const cartClose = document.getElementById('cartClose');
+    const cartCheckout = document.getElementById('cartCheckout');
     const cartItems = document.getElementById('cartItems');
+    const cartTotalLabel = document.getElementById('cartTotalLabel');
     const cartTotal = document.getElementById('cartTotal');
+    const checkoutModal = document.getElementById('checkoutModal');
+    const checkoutClose = document.getElementById('checkoutClose');
+    const checkoutBack = document.getElementById('checkoutBack');
+    const checkoutForm = document.getElementById('checkoutForm');
+    const checkoutItems = document.getElementById('checkoutItems');
+    const checkoutMarketTotal = document.getElementById('checkoutMarketTotal');
+    const checkoutDiscountTotal = document.getElementById('checkoutDiscountTotal');
+    const checkoutGrandTotal = document.getElementById('checkoutGrandTotal');
+    const checkoutStatus = document.getElementById('checkoutStatus');
+    const checkoutFormView = document.getElementById('checkoutFormView');
+    const checkoutConfirmation = document.getElementById('checkoutConfirmation');
+    const confirmationReference = document.getElementById('confirmationReference');
+    const confirmationTotal = document.getElementById('confirmationTotal');
+    const confirmationPayment = document.getElementById('confirmationPayment');
+    const confirmationItems = document.getElementById('confirmationItems');
+    const confirmationClose = document.getElementById('confirmationClose');
     const continueShopping = document.getElementById('continueShopping');
     const cartStorageKey = 'indus-casa-cart';
     let currentProductSlug = '';
+    let lastCheckout = null;
 
     const products = {
-      'navy-signature': {name:'Navy Signature', colour:'Midnight Navy', image:'product-navy-detail.png', sizes:['S','M','L','XL'], description:'A rich navy expression with the Indus Casa gold mark, composed for quiet confidence and everyday ease.'},
-      'white-essential': {name:'White Essential', colour:'Pure White', image:'product-white-detail.png', sizes:['S','M','L','XL'], description:'Minimal, crisp and built around a timeless neutral with an unmistakably polished presence.'},
-      'soft-beige': {name:'Soft Beige', colour:'Soft Beige', image:'product-beige.png', sizes:['S','M','L','XL'], description:'Warm and refined, a softly considered tone for moments that call for understated presence.'},
-      'soft-lilac': {name:'Soft Lilac', colour:'Soft Lilac', image:'product-lilac.png', sizes:['S','M','L','XL'], description:'A restrained colour statement with a composed character and the ease of modern dressing.'},
-      'ivory-cream': {name:'Ivory Cream', colour:'Ivory Cream', image:'product-cream.png', sizes:['S','M','L','XL'], description:'Soft tonal dressing with a warm, elegant character made to move quietly through the day.'},
-      'white-box': {name:'The White Box', colour:'Pure White', image:'product-white.png', sizes:['S','M','L','XL'], description:'The signature Indus Casa presentation, offered as a considered expression of the white essential.'}
+      'navy-signature': {name:'Navy Signature', colour:'Midnight Navy', image:'product-navy-detail.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'A rich navy expression with the Indus Casa gold mark, composed for quiet confidence and everyday ease.'},
+      'white-essential': {name:'White Essential', colour:'Pure White', image:'product-white-detail.png', sizes:['S','M','L','XL'], marketPrice:3499, sellingPrice:2499, description:'Minimal, crisp and built around a timeless neutral with an unmistakably polished presence.'},
+      'soft-beige': {name:'Soft Beige', colour:'Soft Beige', image:'product-beige.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'Warm and refined, a softly considered tone for moments that call for understated presence.'},
+      'soft-lilac': {name:'Soft Lilac', colour:'Soft Lilac', image:'product-lilac.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'A restrained colour statement with a composed character and the ease of modern dressing.'},
+      'ivory-cream': {name:'Ivory Cream', colour:'Ivory Cream', image:'product-cream.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'Soft tonal dressing with a warm, elegant character made to move quietly through the day.'},
+      'white-box': {name:'The White Box', colour:'Pure White', image:'product-white.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'The signature Indus Casa presentation, offered as a considered expression of the white essential.'}
     };
     let cart = loadCart();
 
@@ -879,24 +1092,84 @@
       renderCart();
     }
 
+    function formatPrice(value){
+      return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(value);
+    }
+
+    function getPriceMeta(product){
+      const marketPrice = Number(product.marketPrice || 0);
+      const sellingPrice = Number(product.sellingPrice || 0);
+      const discount = marketPrice > 0 ? Math.round(((marketPrice - sellingPrice) / marketPrice) * 100) : 0;
+      const saved = Math.max(marketPrice - sellingPrice, 0);
+      return { marketPrice, sellingPrice, discount, saved };
+    }
+
+    function getProductPriceMarkup(product){
+      const { marketPrice, sellingPrice, discount, saved } = getPriceMeta(product);
+      return `
+        <div class="product-price">
+          <div class="product-price-row">
+            <span class="market-price">${formatPrice(marketPrice)}</span>
+            <span class="discount-badge">${discount}% off</span>
+          </div>
+          <div class="product-price-main">
+            <strong>${formatPrice(sellingPrice)}</strong>
+            <small>Save ${formatPrice(saved)}</small>
+          </div>
+        </div>
+      `;
+    }
+
+    function getDetailPriceMarkup(product){
+      const { marketPrice, sellingPrice, discount, saved } = getPriceMeta(product);
+      return `
+        <div class="detail-price-row">
+          <span class="detail-market-price">${formatPrice(marketPrice)}</span>
+          <span class="detail-discount-badge">${discount}% off</span>
+        </div>
+        <div class="detail-price-main">
+          <strong class="detail-selling-price">${formatPrice(sellingPrice)}</strong>
+          <span class="detail-price-save">Save ${formatPrice(saved)}</span>
+        </div>
+      `;
+    }
+
     function cartItemCount(){
       return cart.reduce((total, item)=>total + item.quantity, 0);
     }
 
+    function cartTotalPrice(){
+      return cart.reduce((total, item)=>{
+        const product = products[item.slug];
+        const price = product ? Number(product.sellingPrice || item.price || 0) : Number(item.price || 0);
+        return total + (price * item.quantity);
+      }, 0);
+    }
+
     function renderCart(){
       const total = cartItemCount();
+      const totalPrice = cartTotalPrice();
       cartCount.textContent = total;
       cartToggle.setAttribute('aria-label', `Open shopping cart, ${total} item${total === 1 ? '' : 's'}`);
-      cartTotal.textContent = total;
+      cartTotal.textContent = formatPrice(totalPrice);
+      cartTotalLabel.textContent = 'Total';
       if(!cart.length){
         cartItems.innerHTML = '<p class="cart-empty">Your cart is currently empty.</p>';
+        cartCheckout.disabled = true;
+        cartCheckout.style.opacity = '0.5';
+        cartCheckout.style.cursor = 'not-allowed';
         return;
       }
+      cartCheckout.disabled = false;
+      cartCheckout.style.opacity = '1';
+      cartCheckout.style.cursor = 'pointer';
       cartItems.innerHTML = cart.map(item=>{
         const product = products[item.slug];
+        const { marketPrice, sellingPrice, discount } = getPriceMeta(product);
         return `<div class="cart-item" data-cart-key="${item.slug}|${item.size}">
           <img src="${product.image}" alt="${product.name}">
           <div><h3>${product.name}</h3><p>Size: ${item.size}</p>
+            <div class="cart-price"><span class="cart-market-price">${formatPrice(marketPrice)}</span><strong class="cart-selling-price">${formatPrice(sellingPrice)}</strong><span class="cart-discount">${discount}% off</span></div>
             <div class="cart-quantity"><button class="quantity-button" type="button" data-action="decrease" aria-label="Decrease ${product.name} quantity">−</button><span>${item.quantity}</span><button class="quantity-button" type="button" data-action="increase" aria-label="Increase ${product.name} quantity">+</button></div>
             <button class="cart-remove" type="button" data-action="remove">Remove</button>
           </div>
@@ -910,6 +1183,166 @@
       cartOverlay.setAttribute('aria-hidden', 'false');
       document.body.classList.add('cart-open');
       cartClose.focus();
+    }
+
+    function openCheckout(){
+      if(!cart.length){
+        checkoutStatus.textContent = 'Your cart is empty. Add a product before checkout.';
+        return;
+      }
+      renderCheckoutSummary();
+      checkoutStatus.textContent = '';
+      checkoutForm.reset();
+      document.querySelectorAll('#checkoutForm input, #checkoutForm textarea').forEach(field=>{
+        field.setAttribute('aria-invalid', 'false');
+      });
+      document.querySelectorAll('.field-error').forEach(field=>field.textContent = '');
+      checkoutFormView.style.display = 'block';
+      checkoutConfirmation.classList.remove('visible');
+      checkoutModal.classList.add('open');
+      checkoutModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('cart-open');
+      document.getElementById('checkoutFullName').focus();
+    }
+
+    function closeCheckout(){
+      checkoutModal.classList.remove('open');
+      checkoutModal.setAttribute('aria-hidden', 'true');
+      checkoutFormView.style.display = 'block';
+      checkoutConfirmation.classList.remove('visible');
+      checkoutStatus.textContent = '';
+      if(!cartOverlay.classList.contains('open')){
+        document.body.classList.remove('cart-open');
+      }
+    }
+
+    function renderCheckoutSummary(){
+      const marketTotal = cart.reduce((sum, item)=>{
+        const product = products[item.slug];
+        return sum + ((product ? product.marketPrice : 0) * item.quantity);
+      }, 0);
+      const discountTotal = cart.reduce((sum, item)=>{
+        const product = products[item.slug];
+        return sum + (((product ? product.marketPrice : 0) - (product ? product.sellingPrice : 0)) * item.quantity);
+      }, 0);
+      const grandTotal = cart.reduce((sum, item)=>{
+        const product = products[item.slug];
+        return sum + ((product ? product.sellingPrice : 0) * item.quantity);
+      }, 0);
+
+      checkoutMarketTotal.textContent = formatPrice(marketTotal);
+      checkoutDiscountTotal.textContent = `- ${formatPrice(discountTotal)}`;
+      checkoutGrandTotal.textContent = formatPrice(grandTotal);
+
+      checkoutItems.innerHTML = cart.map(item=>{
+        const product = products[item.slug];
+        if(!product) return '';
+        return `
+          <div class="checkout-item">
+            <img src="${product.image}" alt="${product.name}" />
+            <div>
+              <h4>${product.name}</h4>
+              <p>Size: ${item.size} · Qty: ${item.quantity}</p>
+            </div>
+            <strong>${formatPrice(product.sellingPrice * item.quantity)}</strong>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setFieldError(name, message){
+      const field = document.querySelector(`[name="${name}"]`);
+      const error = document.getElementById(`error-${name}`);
+      if(field) field.setAttribute('aria-invalid', message ? 'true' : 'false');
+      if(error) error.textContent = message || '';
+    }
+
+    function validateCheckoutForm(){
+      const formData = new FormData(checkoutForm);
+      const values = {
+        fullName: String(formData.get('fullName') || '').trim(),
+        mobile: String(formData.get('mobile') || '').trim(),
+        email: String(formData.get('email') || '').trim(),
+        address: String(formData.get('address') || '').trim(),
+        city: String(formData.get('city') || '').trim(),
+        state: String(formData.get('state') || '').trim(),
+        pin: String(formData.get('pin') || '').trim(),
+        paymentMethod: String(formData.get('paymentMethod') || '').trim()
+      };
+
+      let valid = true;
+      const errorMap = {
+        fullName: !values.fullName ? 'Please enter your full name.' : '',
+        mobile: !/^\+?[0-9\s-]{10,15}$/.test(values.mobile) ? 'Please enter a valid mobile number.' : '',
+        email: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email) ? 'Please enter a valid email address.' : '',
+        address: !values.address ? 'Please enter your delivery address.' : '',
+        city: !values.city ? 'Please enter your city.' : '',
+        state: !values.state ? 'Please enter your state.' : '',
+        pin: !/^\d{6}$/.test(values.pin) ? 'PIN code must be exactly 6 digits.' : '',
+        payment: !values.paymentMethod ? 'Please select a payment method.' : ''
+      };
+
+      Object.entries(errorMap).forEach(([key, message]) => {
+        if(key === 'payment') {
+          const paymentError = document.getElementById('error-payment');
+          paymentError.textContent = message || '';
+          return;
+        }
+        setFieldError(key, message);
+        if(message) valid = false;
+      });
+
+      if(valid){
+        checkoutStatus.textContent = '';
+      }
+      return valid ? values : null;
+    }
+
+    function createReference(){
+      const stamp = Date.now().toString().slice(-6);
+      return `IC-${stamp}`;
+    }
+
+    function showConfirmation(values){
+      const total = cart.reduce((sum, item)=>{
+        const product = products[item.slug];
+        return sum + ((product ? product.sellingPrice : 0) * item.quantity);
+      }, 0);
+
+      const ref = createReference();
+      confirmationReference.textContent = ref;
+      confirmationTotal.textContent = formatPrice(total);
+      confirmationPayment.textContent = values.paymentMethod;
+      confirmationItems.innerHTML = cart.map(item => {
+        const product = products[item.slug];
+        if(!product) return '';
+        return `
+          <div style="display:flex; justify-content:space-between; gap:12px; border-bottom:1px solid rgba(234,211,155,.12); padding-bottom:8px;">
+            <div>
+              <div style="font-family: var(--serif); font-size: 22px;">${product.name}</div>
+              <div style="font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-top:4px;">Size ${item.size} · Qty ${item.quantity}</div>
+            </div>
+            <strong>${formatPrice(product.sellingPrice * item.quantity)}</strong>
+          </div>
+        `;
+      }).join('');
+
+      checkoutFormView.style.display = 'none';
+      checkoutConfirmation.classList.add('visible');
+      confirmationClose.focus();
+      lastCheckout = { reference: ref, total, payment: values.paymentMethod };
+    }
+
+    function submitCheckout(event){
+      event.preventDefault();
+      const values = validateCheckoutForm();
+      if(!values){
+        checkoutStatus.textContent = 'Please complete all required fields.';
+        return;
+      }
+
+      showConfirmation(values);
+      checkoutStatus.textContent = '';
     }
 
     function closeCart(){
@@ -932,12 +1365,27 @@
         updateAddToCartState();
         return;
       }
+      const product = products[currentProductSlug];
+      const selectedPrice = product ? product.sellingPrice : 0;
       const existing = cart.find(item=>item.slug === currentProductSlug && item.size === size);
-      if(existing) existing.quantity += 1;
-      else cart.push({slug:currentProductSlug, size, quantity:1});
+      if(existing){ existing.quantity += 1; existing.price = selectedPrice; }
+      else cart.push({slug:currentProductSlug, size, quantity:1, price:selectedPrice});
       saveCart();
       detailStatus.textContent = 'Added to cart.';
       openCart();
+    }
+
+    function renderProductCards(){
+      document.querySelectorAll('.product[data-product]').forEach(card=>{
+        const product = products[card.dataset.product];
+        if(!product) return;
+        const info = card.querySelector('.product-info');
+        if(!info) return;
+        const existing = info.querySelector('.product-price');
+        if(existing) existing.remove();
+        const meta = info.querySelector('.product-meta');
+        if(meta) meta.insertAdjacentHTML('afterend', getProductPriceMarkup(product));
+      });
     }
 
     function showProduct(slug){
@@ -955,6 +1403,7 @@
       detailName.textContent = product.name;
       detailDescription.textContent = product.description;
       detailColour.textContent = product.colour;
+      detailPricing.innerHTML = getDetailPriceMarkup(product);
       detailSize.replaceChildren(new Option('Select size', ''));
       product.sizes.forEach(size=>detailSize.add(new Option(size, size)));
       detailSize.value = '';
@@ -979,9 +1428,32 @@
     });
     cartToggle.addEventListener('click', openCart);
     cartClose.addEventListener('click', closeCart);
+    cartCheckout.addEventListener('click', ()=>{
+      closeCart();
+      openCheckout();
+    });
+    checkoutClose.addEventListener('click', closeCheckout);
+    checkoutBack.addEventListener('click', ()=>{
+      closeCheckout();
+      openCart();
+    });
+    confirmationClose.addEventListener('click', ()=>{
+      closeCheckout();
+      cart = [];
+      saveCart();
+    });
+    checkoutForm.addEventListener('submit', submitCheckout);
     continueShopping.addEventListener('click', closeCart);
     cartOverlay.addEventListener('click', event=>{
       if(event.target === cartOverlay) closeCart();
+    });
+    checkoutModal.addEventListener('click', event=>{
+      if(event.target === checkoutModal) closeCheckout();
+    });
+    document.querySelectorAll('input[name="paymentMethod"]').forEach(method=>{
+      method.addEventListener('change', ()=>{
+        document.getElementById('error-payment').textContent = '';
+      });
     });
     cartItems.addEventListener('click', event=>{
       const action = event.target.dataset.action;
@@ -1005,6 +1477,7 @@
       if(event.key === 'Escape' && cartOverlay.classList.contains('open')) closeCart();
     });
     renderCart();
+    renderProductCards();
     window.addEventListener('hashchange', syncProductView);
     syncProductView();
 
