@@ -4,8 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Indus Casa — refined menswear from Uttar Pradesh, India. Explore signature polo and shirt collections and enquire directly on Instagram." />
+  <meta name="robots" content="index, follow" id="page-robots" />
   <meta name="theme-color" content="#07111c" />
   <link rel="canonical" href="https://induscasa.github.io/indus-casa-fashion/" id="page-canonical" />
+  <meta property="og:title" content="Indus Casa | Refined Everyday Luxury" id="page-og-title" />
+  <meta property="og:description" content="Explore refined everyday luxury from Indus Casa." id="page-og-description" />
+  <meta property="og:type" content="website" id="page-og-type" />
+  <meta property="og:url" content="https://induscasa.github.io/indus-casa-fashion/" id="page-og-url" />
+  <meta property="og:image" content="https://induscasa.github.io/indus-casa-fashion/indus-casa-logo.png" id="page-og-image" />
+  <meta name="twitter:card" content="summary_large_image" id="page-twitter-card" />
+  <meta name="twitter:title" content="Indus Casa | Refined Everyday Luxury" id="page-twitter-title" />
+  <meta name="twitter:description" content="Explore refined everyday luxury from Indus Casa." id="page-twitter-description" />
+  <meta name="twitter:image" content="https://induscasa.github.io/indus-casa-fashion/indus-casa-logo.png" id="page-twitter-image" />
   <script type="application/ld+json" id="product-structured-data">{"@context":"https://schema.org","@type":"Organization","name":"Indus Casa"}</script>
   <title>Indus Casa | Refined Everyday Luxury</title>
 
@@ -787,7 +797,7 @@
       <div class="detail-shell">
         <a class="detail-back" href="#pieces">← Back to Collection</a>
         <div class="detail-layout">
-          <div class="detail-media"><img id="detail-image" src="product-navy-detail.png" alt="" decoding="async"></div>
+          <div class="detail-media"><img id="detail-image" src="product-navy-detail.png" alt="Indus Casa product detail" decoding="async"></div>
           <div class="detail-copy">
             <div class="kicker">Signature piece</div>
             <h1 id="detail-name">Navy Signature</h1>
@@ -1067,8 +1077,17 @@
     const confirmationClose = document.getElementById('confirmationClose');
     const continueShopping = document.getElementById('continueShopping');
     const pageDescription = document.querySelector('meta[name="description"]');
+    const pageRobots = document.getElementById('page-robots');
     const pageCanonical = document.getElementById('page-canonical');
     const productStructuredData = document.getElementById('product-structured-data');
+    const pageOgTitle = document.getElementById('page-og-title');
+    const pageOgDescription = document.getElementById('page-og-description');
+    const pageOgType = document.getElementById('page-og-type');
+    const pageOgUrl = document.getElementById('page-og-url');
+    const pageOgImage = document.getElementById('page-og-image');
+    const pageTwitterTitle = document.getElementById('page-twitter-title');
+    const pageTwitterDescription = document.getElementById('page-twitter-description');
+    const pageTwitterImage = document.getElementById('page-twitter-image');
     const cartStorageKey = 'indus-casa-cart';
     let currentProductSlug = '';
     let lastCheckout = null;
@@ -1398,7 +1417,16 @@
       if(!product){
         document.title = 'Indus Casa | Refined Everyday Luxury';
         pageDescription.content = 'Indus Casa — refined menswear from Uttar Pradesh, India. Explore signature polo and shirt collections and enquire directly on Instagram.';
+        pageRobots.content = 'index, follow';
         pageCanonical.href = 'https://induscasa.github.io/indus-casa-fashion/';
+        pageOgTitle.content = 'Indus Casa | Refined Everyday Luxury';
+        pageOgDescription.content = 'Explore refined everyday luxury from Indus Casa.';
+        pageOgType.content = 'website';
+        pageOgUrl.content = 'https://induscasa.github.io/indus-casa-fashion/';
+        pageOgImage.content = 'https://induscasa.github.io/indus-casa-fashion/indus-casa-logo.png';
+        pageTwitterTitle.content = pageOgTitle.content;
+        pageTwitterDescription.content = pageOgDescription.content;
+        pageTwitterImage.content = pageOgImage.content;
         productStructuredData.textContent = '';
         document.body.classList.remove('detail-view');
         detailPage.classList.remove('active');
@@ -1407,7 +1435,16 @@
       currentProductSlug = slug;
       document.title = `${product.name} | Indus Casa`;
       pageDescription.content = product.description;
+      pageRobots.content = 'index, follow';
       pageCanonical.href = `https://induscasa.github.io/indus-casa-fashion/product/${slug}/`;
+      pageOgTitle.content = `${product.name} | Indus Casa`;
+      pageOgDescription.content = product.description;
+      pageOgType.content = 'product';
+      pageOgUrl.content = pageCanonical.href;
+      pageOgImage.content = `https://induscasa.github.io/indus-casa-fashion/${product.image}`;
+      pageTwitterTitle.content = pageOgTitle.content;
+      pageTwitterDescription.content = pageOgDescription.content;
+      pageTwitterImage.content = pageOgImage.content;
       productStructuredData.textContent = JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'Product',
