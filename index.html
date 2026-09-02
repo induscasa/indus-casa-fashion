@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Indus Casa — refined menswear from Uttar Pradesh, India. Explore signature polo and shirt collections and enquire directly on Instagram." />
   <meta name="theme-color" content="#07111c" />
+  <link rel="canonical" href="https://induscasa.github.io/indus-casa-fashion/" id="page-canonical" />
+  <script type="application/ld+json" id="product-structured-data">{"@context":"https://schema.org","@type":"Organization","name":"Indus Casa"}</script>
   <title>Indus Casa | Refined Everyday Luxury</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -886,7 +888,7 @@
             <h3>Navy Signature</h3>
             <p>A rich navy expression with the Indus Casa gold mark.</p>
             <div class="product-meta"><span>Colour: Midnight Navy</span></div>
-            <a class="product-link" href="#product/navy-signature" aria-label="View Navy Signature product">View Product</a>
+            <a class="product-link" href="product/navy-signature/" aria-label="View Navy Signature product">View Product</a>
           </div>
         </article>
 
@@ -899,7 +901,7 @@
             <h3>White Essential</h3>
             <p>Minimal, crisp and built around a timeless neutral.</p>
             <div class="product-meta"><span>Colour: Pure White</span></div>
-            <a class="product-link" href="#product/white-essential" aria-label="View White Essential product">View Product</a>
+            <a class="product-link" href="product/white-essential/" aria-label="View White Essential product">View Product</a>
           </div>
         </article>
 
@@ -912,7 +914,7 @@
             <h3>Soft Beige</h3>
             <p>Warm, refined and designed for understated presence.</p>
             <div class="product-meta"><span>Colour: Soft Beige</span></div>
-            <a class="product-link" href="#product/soft-beige" aria-label="View Soft Beige product">View Product</a>
+            <a class="product-link" href="product/soft-beige/" aria-label="View Soft Beige product">View Product</a>
           </div>
         </article>
 
@@ -925,7 +927,7 @@
             <h3>Soft Lilac</h3>
             <p>A restrained colour statement with a premium finish.</p>
             <div class="product-meta"><span>Colour: Soft Lilac</span></div>
-            <a class="product-link" href="#product/soft-lilac" aria-label="View Soft Lilac product">View Product</a>
+            <a class="product-link" href="product/soft-lilac/" aria-label="View Soft Lilac product">View Product</a>
           </div>
         </article>
 
@@ -938,7 +940,7 @@
             <h3>Ivory Cream</h3>
             <p>Soft tonal dressing with a warm, elegant character.</p>
             <div class="product-meta"><span>Colour: Ivory Cream</span></div>
-            <a class="product-link" href="#product/ivory-cream" aria-label="View Ivory Cream product">View Product</a>
+            <a class="product-link" href="product/ivory-cream/" aria-label="View Ivory Cream product">View Product</a>
           </div>
         </article>
 
@@ -951,7 +953,7 @@
             <h3>The White Box</h3>
             <p>Presented with the signature Indus Casa packaging aesthetic.</p>
             <div class="product-meta"><span>Colour: Pure White</span></div>
-            <a class="product-link" href="#product/white-box" aria-label="View The White Box product">View Product</a>
+            <a class="product-link" href="product/white-box/" aria-label="View The White Box product">View Product</a>
           </div>
         </article>
       </div>
@@ -1064,6 +1066,9 @@
     const confirmationItems = document.getElementById('confirmationItems');
     const confirmationClose = document.getElementById('confirmationClose');
     const continueShopping = document.getElementById('continueShopping');
+    const pageDescription = document.querySelector('meta[name="description"]');
+    const pageCanonical = document.getElementById('page-canonical');
+    const productStructuredData = document.getElementById('product-structured-data');
     const cartStorageKey = 'indus-casa-cart';
     let currentProductSlug = '';
     let lastCheckout = null;
@@ -1391,11 +1396,34 @@
     function showProduct(slug){
       const product = products[slug];
       if(!product){
+        document.title = 'Indus Casa | Refined Everyday Luxury';
+        pageDescription.content = 'Indus Casa — refined menswear from Uttar Pradesh, India. Explore signature polo and shirt collections and enquire directly on Instagram.';
+        pageCanonical.href = 'https://induscasa.github.io/indus-casa-fashion/';
+        productStructuredData.textContent = '';
         document.body.classList.remove('detail-view');
         detailPage.classList.remove('active');
         return;
       }
       currentProductSlug = slug;
+      document.title = `${product.name} | Indus Casa`;
+      pageDescription.content = product.description;
+      pageCanonical.href = `https://induscasa.github.io/indus-casa-fashion/product/${slug}/`;
+      productStructuredData.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description: product.description,
+        image: [`https://induscasa.github.io/indus-casa-fashion/${product.image}`],
+        brand: {'@type': 'Brand', name: 'Indus Casa'},
+        color: product.colour,
+        offers: {
+          '@type': 'Offer',
+          url: `https://induscasa.github.io/indus-casa-fashion/product/${slug}/`,
+          priceCurrency: 'INR',
+          price: String(product.sellingPrice),
+          availability: 'https://schema.org/InStock'
+        }
+      });
       document.body.classList.add('detail-view');
       detailPage.classList.add('active');
       detailImage.src = product.image;
@@ -1413,7 +1441,8 @@
     }
 
     function syncProductView(){
-      const slug = window.location.hash.startsWith('#product/') ? window.location.hash.slice(9) : '';
+      const pathMatch = window.location.pathname.match(/\/product\/([^/]+)\/?$/);
+      const slug = pathMatch ? pathMatch[1] : (window.location.hash.startsWith('#product/') ? window.location.hash.slice(9) : '');
       showProduct(slug);
     }
     document.querySelectorAll('.product[data-product]').forEach(card=>{
