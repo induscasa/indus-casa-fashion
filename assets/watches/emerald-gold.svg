@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="title desc">
+  <title id="title">Indus Casa Emerald Gold watch</title>
+  <desc id="desc">A green dial watch with a gold-tone case and green leather strap.</desc>
+  <rect width="600" height="600" fill="#0b1722"/>
+  <path d="M250 0h100l28 145H222zM222 455h156l-28 145H250z" fill="#315d48"/>
+  <rect x="180" y="116" width="240" height="368" rx="118" fill="#caa45a"/>
+  <circle cx="300" cy="300" r="104" fill="#17634d" stroke="#ead39b" stroke-width="8"/>
+  <circle cx="300" cy="300" r="9" fill="#ead39b"/>
+  <g stroke="#ead39b" stroke-width="6" stroke-linecap="round"><path d="M300 220v80l55 34"/><path d="M300 210v-18M300 408v-18M210 300h18M372 300h18"/></g>
+  <text x="300" y="270" text-anchor="middle" fill="#ead39b" font-family="Georgia,serif" font-size="18" letter-spacing="3">INDUS</text>
+  <text x="300" y="350" text-anchor="middle" fill="#ead39b" font-family="Arial,sans-serif" font-size="12" letter-spacing="2">CASA</text>
+</svg>

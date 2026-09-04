@@ -21,6 +21,7 @@
   <meta name="twitter:description" content="Discover Indus Casa Fashion — premium everyday fashion with refined designs, elegant silhouettes and a curated collection for the modern wardrobe." id="page-twitter-description" />
   <meta name="twitter:image" content="https://induscasa.github.io/indus-casa-fashion/indus-casa-logo.png" id="page-twitter-image" />
   <script type="application/ld+json" id="organization-website-structured-data">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://induscasa.github.io/indus-casa-fashion/#organization","name":"Indus Casa","url":"https://induscasa.github.io/indus-casa-fashion/","logo":"https://induscasa.github.io/indus-casa-fashion/indus-casa-logo.png","sameAs":["https://www.instagram.com/induscasafashion"]},{"@type":"WebSite","@id":"https://induscasa.github.io/indus-casa-fashion/#website","name":"Indus Casa","url":"https://induscasa.github.io/indus-casa-fashion/","publisher":{"@id":"https://induscasa.github.io/indus-casa-fashion/#organization"}}]}</script>
+  <script type="application/ld+json" id="product-structured-data"></script>
   <title>Indus Casa Fashion | Premium Fashion Collection</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -495,6 +496,16 @@
     .detail-selling-price{font-family:var(--serif);font-size:32px;font-weight:500;color:var(--white)}
     .detail-price-save{color:var(--gold-soft);font-size:9px;letter-spacing:.14em;text-transform:uppercase}
     .detail-label{display:block;color:var(--gold-soft);font-size:9px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:9px}
+    .detail-specs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 18px;margin:24px 0 4px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);list-style:none}
+    .detail-specs li{color:rgba(255,255,255,.72);font-size:11px;line-height:1.5}
+    .detail-specs li::before{content:"";display:inline-block;width:5px;height:5px;margin:0 8px 2px 0;border:1px solid var(--gold);border-radius:50%}
+    .watches-section{background:linear-gradient(145deg,#0b1a27 0%,#132d38 52%,#0b1722 100%);border-top:1px solid rgba(234,211,155,.24);border-bottom:1px solid rgba(234,211,155,.24)}
+    .watches-section .section-head h2{color:var(--gold-soft)}
+    .watches-section .section-head p{color:rgba(255,255,255,.72)}
+    .watches-kicker{color:#9bc3bb}
+    .watch-card .product-media{background:#102832}
+    .watch-card .product-media img{object-fit:contain;padding:18px;background:radial-gradient(circle at center,#24494b 0%,#102832 67%,#0b1b27 100%)}
+    .watch-card .product-info{background:rgba(4,14,21,.24)}
     .size-select{width:100%;height:48px;padding:0 14px;border:1px solid rgba(234,211,155,.35);background:#0a1926;color:var(--white);font:inherit;font-size:11px;letter-spacing:.08em;cursor:pointer}
     .size-select option{background:#0a1926;color:var(--white)}
     .detail-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
@@ -622,6 +633,7 @@
       .detail-meta{gap:22px}
       .detail-actions{display:grid}
       .detail-actions .btn{width:100%}
+      .detail-specs{grid-template-columns:1fr}
       .cart-toggle{font-size:0;letter-spacing:0}
       .cart-toggle::before{content:"Cart";font-size:10px;letter-spacing:.16em}
       .cart-drawer{padding:24px 20px}
@@ -639,6 +651,7 @@
       <ul class="nav-links">
         <li><a href="#collection">Collection</a></li>
         <li><a href="#pieces">Signature Pieces</a></li>
+        <li><a href="#watches">Watches</a></li>
         <li><a href="#house">The House</a></li>
         <li><a href="#order">Enquire</a></li>
       </ul>
@@ -653,6 +666,7 @@
     <div class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
       <a href="#collection">Collection</a>
       <a href="#pieces">Signature Pieces</a>
+      <a href="#watches">Watches</a>
       <a href="#house">The House</a>
       <a href="#order">Enquire</a>
     </div>
@@ -799,28 +813,56 @@
   <main id="home">
     <section class="detail-page" id="product-detail" aria-live="polite">
       <div class="detail-shell">
-        <a class="detail-back" href="#pieces">← Back to Collection</a>
+        <a class="detail-back" id="detail-back" href="#pieces">← Back to Collection</a>
         <div class="detail-layout">
           <div class="detail-media"><img id="detail-image" src="product-navy-detail.png" alt="Indus Casa product detail" decoding="async"></div>
           <div class="detail-copy">
-            <div class="kicker">Signature piece</div>
+            <div class="kicker" id="detail-category">Signature piece</div>
             <h1 id="detail-name">Navy Signature</h1>
             <p class="detail-description" id="detail-description"></p>
             <div class="detail-meta">
               <div><span>Colour</span><strong id="detail-colour"></strong></div>
             </div>
             <div class="detail-pricing" id="detail-pricing" aria-live="polite"></div>
+            <ul class="detail-specs" id="detail-specs"></ul>
             <label class="detail-label" for="detail-size">Size</label>
             <select class="size-select" id="detail-size">
               <option value="">Select size</option>
             </select>
+            <label class="detail-label" for="detail-quantity" style="margin-top:18px">Quantity</label>
+            <input class="size-select" id="detail-quantity" type="number" min="1" max="99" value="1" aria-label="Quantity">
             <div class="detail-actions">
               <button class="btn gold" id="add-to-cart" type="button">Add to Cart</button>
-              <a class="btn ghost" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Enquire on Instagram</a>
+              <a class="btn ghost" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener">Buy / Enquire Now</a>
             </div>
+            <a class="detail-back" id="detail-continue" href="#pieces" style="margin-top:22px">Continue Shopping</a>
             <p class="detail-status" id="detail-status" role="status"></p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="section products watches-section" id="watches">
+      <div class="section-head reveal">
+        <div>
+          <div class="kicker watches-kicker">Timepieces · Indus Casa</div>
+          <h2>INDUS CASA WATCHES</h2>
+        </div>
+        <p>TIMELESS BY DESIGN. Three considered timepieces with refined colour, leather straps and precise quartz movement.</p>
+      </div>
+      <div class="product-grid">
+        <article class="product watch-card reveal" data-product="indus-casa-emerald-gold" tabindex="0">
+          <div class="product-media"><img src="assets/watches/emerald-gold.svg" alt="Indus Casa Emerald Gold watch" loading="lazy" decoding="async"><span class="product-badge">Watches</span></div>
+          <div class="product-info"><h3>Indus Casa Emerald Gold</h3><p>Green dial, gold-tone case and green leather strap.</p><div class="product-meta"><span>Category: Watches</span><span>3ATM · Quartz</span></div><a class="product-link" href="product/indus-casa-emerald-gold/" aria-label="View Indus Casa Emerald Gold product">View Details</a></div>
+        </article>
+        <article class="product watch-card reveal" data-product="indus-casa-emerald-silver" tabindex="0">
+          <div class="product-media"><img src="assets/watches/emerald-silver.svg" alt="Indus Casa Emerald Silver watch" loading="lazy" decoding="async"><span class="product-badge">Watches</span></div>
+          <div class="product-info"><h3>Indus Casa Emerald Silver</h3><p>Green dial, silver-tone case and green leather strap.</p><div class="product-meta"><span>Category: Watches</span><span>3ATM · Quartz</span></div><a class="product-link" href="product/indus-casa-emerald-silver/" aria-label="View Indus Casa Emerald Silver product">View Details</a></div>
+        </article>
+        <article class="product watch-card reveal" data-product="indus-casa-royal-blue" tabindex="0">
+          <div class="product-media"><img src="assets/watches/royal-blue.svg" alt="Indus Casa Royal Blue watch" loading="lazy" decoding="async"><span class="product-badge">Watches</span></div>
+          <div class="product-info"><h3>Indus Casa Royal Blue</h3><p>Deep blue dial, gold-tone case and brown leather strap.</p><div class="product-meta"><span>Category: Watches</span><span>3ATM · Quartz</span></div><a class="product-link" href="product/indus-casa-royal-blue/" aria-label="View Indus Casa Royal Blue product">View Details</a></div>
+        </article>
       </div>
     </section>
     <section class="hero">
@@ -1049,10 +1091,15 @@
     const detailPage = document.getElementById('product-detail');
     const detailImage = document.getElementById('detail-image');
     const detailName = document.getElementById('detail-name');
+    const detailCategory = document.getElementById('detail-category');
+    const detailBack = document.getElementById('detail-back');
+    const detailContinue = document.getElementById('detail-continue');
     const detailDescription = document.getElementById('detail-description');
     const detailColour = document.getElementById('detail-colour');
     const detailPricing = document.getElementById('detail-pricing');
+    const detailSpecs = document.getElementById('detail-specs');
     const detailSize = document.getElementById('detail-size');
+    const detailQuantity = document.getElementById('detail-quantity');
     const detailStatus = document.getElementById('detail-status');
     const addToCartButton = document.getElementById('add-to-cart');
     const cartToggle = document.getElementById('cartToggle');
@@ -1097,12 +1144,15 @@
     let lastCheckout = null;
 
     const products = {
-      'navy-signature': {name:'Navy Signature', colour:'Midnight Navy', image:'product-navy-detail.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'A rich navy expression with the Indus Casa gold mark, composed for quiet confidence and everyday ease.'},
-      'white-essential': {name:'White Essential', colour:'Pure White', image:'product-white-detail.png', sizes:['S','M','L','XL'], marketPrice:3499, sellingPrice:2499, description:'Minimal, crisp and built around a timeless neutral with an unmistakably polished presence.'},
-      'soft-beige': {name:'Soft Beige', colour:'Soft Beige', image:'product-beige.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'Warm and refined, a softly considered tone for moments that call for understated presence.'},
-      'soft-lilac': {name:'Soft Lilac', colour:'Soft Lilac', image:'product-lilac.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'A restrained colour statement with a composed character and the ease of modern dressing.'},
-      'ivory-cream': {name:'Ivory Cream', colour:'Ivory Cream', image:'product-cream.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'Soft tonal dressing with a warm, elegant character made to move quietly through the day.'},
-      'white-box': {name:'The White Box', colour:'Pure White', image:'product-white.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'The signature Indus Casa presentation, offered as a considered expression of the white essential.'}
+      'navy-signature': {name:'Navy Signature', category:'Signature Pieces', colour:'Midnight Navy', image:'product-navy-detail.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'A rich navy expression with the Indus Casa gold mark, composed for quiet confidence and everyday ease.', specs:[]},
+      'white-essential': {name:'White Essential', category:'Signature Pieces', colour:'Pure White', image:'product-white-detail.png', sizes:['S','M','L','XL'], marketPrice:3499, sellingPrice:2499, description:'Minimal, crisp and built around a timeless neutral with an unmistakably polished presence.', specs:[]},
+      'soft-beige': {name:'Soft Beige', category:'Signature Pieces', colour:'Soft Beige', image:'product-beige.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'Warm and refined, a softly considered tone for moments that call for understated presence.', specs:[]},
+      'soft-lilac': {name:'Soft Lilac', category:'Signature Pieces', colour:'Soft Lilac', image:'product-lilac.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'A restrained colour statement with a composed character and the ease of modern dressing.', specs:[]},
+      'ivory-cream': {name:'Ivory Cream', category:'Signature Pieces', colour:'Ivory Cream', image:'product-cream.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'Soft tonal dressing with a warm, elegant character made to move quietly through the day.', specs:[]},
+      'white-box': {name:'The White Box', category:'Signature Pieces', colour:'Pure White', image:'product-white.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'The signature Indus Casa presentation, offered as a considered expression of the white essential.', specs:[]},
+      'indus-casa-emerald-gold': {name:'Indus Casa Emerald Gold', category:'Watches', colour:'Green dial · Gold-tone case', image:'assets/watches/emerald-gold.svg', sizes:['One Size'], marketPrice:2449, sellingPrice:1949, description:'Designed for timeless everyday elegance, the Indus Casa Emerald Gold combines a refined green dial with a gold-tone case and green leather strap. Built with 3ATM water resistance, sapphire coated glass, precise quartz movement and a date function.', specs:['Green dial','Gold-tone case','Green leather strap','3ATM Water Resistant','Sapphire Coated Glass','Precise Quartz Movement','Date Function']},
+      'indus-casa-emerald-silver': {name:'Indus Casa Emerald Silver', category:'Watches', colour:'Green dial · Silver-tone case', image:'assets/watches/emerald-silver.svg', sizes:['One Size'], marketPrice:2199, sellingPrice:1499, description:'Designed for timeless everyday elegance, the Indus Casa Emerald Silver pairs a refined green dial with a silver-tone case and green leather strap. Built with 3ATM water resistance, sapphire coated glass, precise quartz movement and a date function.', specs:['Green dial','Silver-tone case','Green leather strap','3ATM Water Resistant','Sapphire Coated Glass','Precise Quartz Movement','Date Function']},
+      'indus-casa-royal-blue': {name:'Indus Casa Royal Blue', category:'Watches', colour:'Deep blue dial · Gold-tone case', image:'assets/watches/royal-blue.svg', sizes:['One Size'], marketPrice:2149, sellingPrice:1149, description:'Designed for timeless everyday elegance, the Indus Casa Royal Blue brings together a deep blue dial, gold-tone case and brown leather strap. Built with 3ATM water resistance, sapphire coated glass, precise quartz movement and a date function.', specs:['Deep blue dial','Gold-tone case','Brown leather strap','3ATM Water Resistant','Sapphire Coated Glass','Precise Quartz Movement','Date Function']}
     };
     let cart = loadCart();
 
@@ -1138,11 +1188,11 @@
         <div class="product-price">
           <div class="product-price-row">
             <span class="market-price">${formatPrice(marketPrice)}</span>
-            <span class="discount-badge">${discount}% off</span>
+            <span class="discount-badge">${product.category === 'Watches' ? `${discount}% OFF` : `${discount}% off`}</span>
           </div>
           <div class="product-price-main">
             <strong>${formatPrice(sellingPrice)}</strong>
-            <small>Save ${formatPrice(saved)}</small>
+            <small>${product.category === 'Watches' ? 'SAVE ' : 'Save '}${formatPrice(saved)}</small>
           </div>
         </div>
       `;
@@ -1153,11 +1203,11 @@
       return `
         <div class="detail-price-row">
           <span class="detail-market-price">${formatPrice(marketPrice)}</span>
-          <span class="detail-discount-badge">${discount}% off</span>
+          <span class="detail-discount-badge">${product.category === 'Watches' ? `${discount}% OFF` : `${discount}% off`}</span>
         </div>
         <div class="detail-price-main">
           <strong class="detail-selling-price">${formatPrice(sellingPrice)}</strong>
-          <span class="detail-price-save">Save ${formatPrice(saved)}</span>
+          <span class="detail-price-save">${product.category === 'Watches' ? 'SAVE ' : 'Save '}${formatPrice(saved)}</span>
         </div>
       `;
     }
@@ -1197,7 +1247,7 @@
         return `<div class="cart-item" data-cart-key="${item.slug}|${item.size}">
           <img src="${product.image}" alt="${product.name}">
           <div><h3>${product.name}</h3><p>Size: ${item.size}</p>
-            <div class="cart-price"><span class="cart-market-price">${formatPrice(marketPrice)}</span><strong class="cart-selling-price">${formatPrice(sellingPrice)}</strong><span class="cart-discount">${discount}% off</span></div>
+            <div class="cart-price"><span class="cart-market-price">${formatPrice(marketPrice)}</span><strong class="cart-selling-price">${formatPrice(sellingPrice)}</strong><span class="cart-discount">${product.category === 'Watches' ? `${discount}% OFF` : `${discount}% off`}</span></div>
             <div class="cart-quantity"><button class="quantity-button" type="button" data-action="decrease" aria-label="Decrease ${product.name} quantity">−</button><span>${item.quantity}</span><button class="quantity-button" type="button" data-action="increase" aria-label="Increase ${product.name} quantity">+</button></div>
             <button class="cart-remove" type="button" data-action="remove">Remove</button>
           </div>
@@ -1387,6 +1437,7 @@
 
     function addToCart(){
       const size = detailSize.value;
+      const quantity = Math.max(1, Math.min(99, Number.parseInt(detailQuantity.value, 10) || 1));
       if(!size){
         detailStatus.textContent = 'Please select a size.';
         detailSize.focus();
@@ -1396,8 +1447,8 @@
       const product = products[currentProductSlug];
       const selectedPrice = product ? product.sellingPrice : 0;
       const existing = cart.find(item=>item.slug === currentProductSlug && item.size === size);
-      if(existing){ existing.quantity += 1; existing.price = selectedPrice; }
-      else cart.push({slug:currentProductSlug, size, quantity:1, price:selectedPrice});
+      if(existing){ existing.quantity += quantity; existing.price = selectedPrice; }
+      else cart.push({slug:currentProductSlug, size, quantity, price:selectedPrice});
       saveCart();
       detailStatus.textContent = 'Added to cart.';
       openCart();
@@ -1456,6 +1507,7 @@
         description: product.description,
         image: [`https://induscasa.github.io/indus-casa-fashion/${product.image}`],
         brand: {'@type': 'Brand', name: 'Indus Casa'},
+        category: product.category,
         color: product.colour,
         offers: {
           '@type': 'Offer',
@@ -1470,12 +1522,20 @@
       detailImage.src = product.image;
       detailImage.alt = `Indus Casa ${product.name}`;
       detailName.textContent = product.name;
+      detailCategory.textContent = product.category === 'Watches' ? 'Watches' : 'Signature piece';
+      detailBack.textContent = product.category === 'Watches' ? '← Back to Watches' : '← Back to Collection';
+      detailBack.href = product.category === 'Watches' ? '#watches' : '#pieces';
+      detailContinue.href = product.category === 'Watches' ? '#watches' : '#pieces';
       detailDescription.textContent = product.description;
       detailColour.textContent = product.colour;
       detailPricing.innerHTML = getDetailPriceMarkup(product);
+      detailSpecs.innerHTML = product.specs.map(spec=>`<li>${spec}</li>`).join('');
       detailSize.replaceChildren(new Option('Select size', ''));
       product.sizes.forEach(size=>detailSize.add(new Option(size, size)));
       detailSize.value = '';
+      detailQuantity.value = '1';
+      detailQuantity.hidden = product.category !== 'Watches';
+      detailQuantity.previousElementSibling.hidden = product.category !== 'Watches';
       detailStatus.textContent = '';
       updateAddToCartState();
       window.scrollTo({top:0, behavior:'smooth'});
