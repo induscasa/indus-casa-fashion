@@ -16,3 +16,4 @@ https://www.instagram.com/induscasafashion
 - Responsive desktop/tablet/mobile layout.
 - Scroll reveal animations, cinematic hero zoom, navigation transition, progress bar and desktop hover interactions.
 - No logo artwork has been redrawn or altered. The supplied logo image is used as provided.
+https://github.com/induscasa/indus-casa-fashion/blob/c1a450e218f5d7ef1125c18c189707fe870a5aab/emerald-silver.png
