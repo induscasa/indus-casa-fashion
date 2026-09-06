@@ -9,8 +9,51 @@ const products = {
   'white-box': { name: 'The White Box', market: '₹2,499', selling: '₹1,999', discount: '20% off' }
 };
 
+const authConfig = {
+  url: 'https://example.supabase.co',
+  anonKey: 'public-anon-test-key'
+};
+
+const customer = {
+  id: 'customer-1',
+  email: 'aarav@example.com',
+  user_metadata: { full_name: 'Aarav Singh', mobile: '9876543210' }
+};
+
+const session = {
+  access_token: 'customer-access-token',
+  refresh_token: 'customer-refresh-token',
+  token_type: 'bearer',
+  user: customer
+};
+
+async function loginCustomer(page){
+  await page.route('https://example.supabase.co/auth/v1/token?grant_type=password', async route => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(session) });
+  });
+  await page.route('https://example.supabase.co/auth/v1/user', async route => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(customer) });
+  });
+  await page.route('https://example.supabase.co/rest/v1/orders**', async route => {
+    if(route.request().method() === 'GET'){
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      return;
+    }
+    await route.fallback();
+  });
+  await page.click('#accountToggle');
+  await page.fill('#accountEmail', customer.email);
+  await page.fill('#accountPassword', 'correct-password');
+  await page.click('#accountSubmit');
+  await expect(page.locator('#accountDashboardView')).toHaveClass(/active/);
+  await page.click('#accountClose');
+}
+
 test.describe('Indus Casa checkout flow', () => {
   test.beforeEach(async ({ page }) => {
+    await page.addInitScript(config => {
+      window.INDUS_CASA_SUPABASE = config;
+    }, authConfig);
     await page.goto('http://localhost:8000/#product/navy-signature');
     await page.evaluate(() => localStorage.clear());
     await page.reload({ waitUntil: 'networkidle' });
@@ -34,6 +77,20 @@ test.describe('Indus Casa checkout flow', () => {
     await expect(page.locator('#checkoutGrandTotal')).toHaveText('₹1,999');
     await expect(page.locator('#checkoutMarketTotal')).toHaveText('₹2,499');
     await expect(page.locator('#checkoutDiscountTotal')).toHaveText('- ₹500');
+  });
+
+  test('guest checkout requires login or account creation before placing an order', async ({ page }) => {
+    await page.selectOption('#detail-size', 'M');
+    await page.click('#add-to-cart');
+    await page.click('#cartCheckout');
+    await page.click('#placeOrderButton');
+
+    await expect(page.locator('#checkoutModal')).not.toHaveClass(/open/);
+    await expect(page.locator('#accountModal')).toHaveClass(/open/);
+    await expect(page.locator('#accountAuthView')).toHaveClass(/active/);
+    await expect(page.locator('#accountSubmit')).toHaveText('Login');
+    await expect(page.locator('#accountModeToggle')).toHaveText('Create an account');
+    await expect(page.locator('#cartCount')).toHaveText('1');
   });
 
   test('all six products show exact prices on cards and detail pages', async ({ page }) => {
@@ -66,7 +123,8 @@ test.describe('Indus Casa checkout flow', () => {
         await expect(cartItem.locator('.cart-market-price')).toHaveText(product.market);
         await expect(cartItem.locator('.cart-selling-price')).toHaveText(product.selling);
         await expect(cartItem.locator('.cart-discount')).toHaveText(product.discount);
-        await page.click('#cartClose');
+        await page.evaluate(() => document.getElementById('cartClose').click());
+        await expect(page.locator('#cartOverlay')).not.toHaveClass(/open/);
       }
     }
   });
@@ -136,6 +194,7 @@ test.describe('Indus Casa checkout flow', () => {
   });
 
   test('required field validation prevents incomplete checkout', async ({ page }) => {
+    await loginCustomer(page);
     await page.selectOption('#detail-size', 'M');
     await page.click('#add-to-cart');
     await page.click('#cartCheckout');
@@ -152,6 +211,7 @@ test.describe('Indus Casa checkout flow', () => {
   });
 
   test('invalid phone, email, and PIN values prevent checkout submission', async ({ page }) => {
+    await loginCustomer(page);
     await page.selectOption('#detail-size', 'M');
     await page.click('#add-to-cart');
     await page.click('#cartCheckout');
@@ -172,6 +232,7 @@ test.describe('Indus Casa checkout flow', () => {
   });
 
   test('payment method selection and enquiry confirmation work', async ({ page }) => {
+    await loginCustomer(page);
     await page.selectOption('#detail-size', 'M');
     await page.click('#add-to-cart');
     await page.click('#cartCheckout');
@@ -200,6 +261,7 @@ test.describe('Indus Casa checkout flow', () => {
   });
 
   test('checkout review shows payment and subtotals and blocks duplicate submission', async ({ page }) => {
+    await loginCustomer(page);
     let notificationCount = 0;
     await page.route('https://formsubmit.co/ajax/induscasafashion@gmail.com', async route => {
       notificationCount += 1;
@@ -233,12 +295,6 @@ test.describe('Indus Casa checkout flow', () => {
   });
 
   test('stores one complete COD order when Supabase is configured', async ({ page }) => {
-    await page.addInitScript(() => {
-      window.INDUS_CASA_SUPABASE = {
-        url: 'https://example.supabase.co',
-        anonKey: 'public-anon-test-key'
-      };
-    });
     let storedOrder;
     let storageRequestCount = 0;
     await page.route('https://example.supabase.co/rest/v1/orders', async route => {
@@ -251,6 +307,7 @@ test.describe('Indus Casa checkout flow', () => {
     });
 
     await page.reload({ waitUntil: 'networkidle' });
+    await loginCustomer(page);
     await page.selectOption('#detail-size', 'M');
     await page.click('#add-to-cart');
     await page.click('#cartCheckout');
@@ -277,7 +334,7 @@ test.describe('Indus Casa checkout flow', () => {
       delivery_state: 'Rajasthan',
       delivery_pin: '302001',
       order_total: 1999,
-      customer_id: null,
+      customer_id: customer.id,
       payment_method: 'Cash on Delivery',
       payment_status: 'COD',
       order_status: 'New'
@@ -296,6 +353,7 @@ test.describe('Indus Casa checkout flow', () => {
   });
 
   test('submits complete order notification without blocking confirmation', async ({ page }) => {
+    await loginCustomer(page);
     let notificationRequest;
     await page.route('https://formsubmit.co/ajax/induscasafashion@gmail.com', async route => {
       notificationRequest = route.request().postDataJSON();
@@ -333,6 +391,7 @@ test.describe('Indus Casa checkout flow', () => {
   });
 
   test('keeps confirmation when notification service fails', async ({ page }) => {
+    await loginCustomer(page);
     await page.route('https://formsubmit.co/ajax/induscasafashion@gmail.com', route => route.abort());
     await page.selectOption('#detail-size', 'M');
     await page.click('#add-to-cart');
