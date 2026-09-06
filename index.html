@@ -1184,6 +1184,7 @@
     </div>
   </footer>
 
+  <script src="./supabase-config.js"></script>
   <script>
     const nav = document.getElementById('nav');
     const progress = document.getElementById('progress');
@@ -1245,6 +1246,7 @@
     const pageTwitterImage = document.getElementById('page-twitter-image');
     const cartStorageKey = 'indus-casa-cart';
     const orderNotificationEndpoint = 'https://formsubmit.co/ajax/induscasafashion@gmail.com';
+    const supabaseConfig = window.INDUS_CASA_SUPABASE || {};
     let currentProductSlug = '';
     let lastCheckout = null;
     let checkoutSubmitting = false;
@@ -1533,7 +1535,7 @@
     }
 
     function getOrderNotification(values, order){
-      const items = cart.map(item=>{
+      const items = (order.items || cart).map(item=>{
         const product = products[item.slug];
         return `${product.name} | Size/variant: ${item.size} | Quantity: ${item.quantity} | Individual price: ${formatPrice(product.sellingPrice)} | Line total: ${formatPrice(product.sellingPrice * item.quantity)}`;
       }).join('\n');
@@ -1556,6 +1558,58 @@
       };
     }
 
+    async function saveOrderToBackend(values, order){
+      const supabaseUrl = String(supabaseConfig.url || '').replace(/\/$/, '');
+      const supabaseAnonKey = String(supabaseConfig.anonKey || '');
+      if(!supabaseUrl || !supabaseAnonKey) return true;
+
+      const items = (order.items || cart).map(item=>{
+        const product = products[item.slug];
+        return {
+          product_slug: item.slug,
+          product_name: product.name,
+          variant_size: item.size,
+          quantity: item.quantity,
+          unit_price: product.sellingPrice,
+          item_subtotal: product.sellingPrice * item.quantity
+        };
+      });
+      const payload = {
+        order_reference: order.reference,
+        order_date_time: order.orderDate,
+        customer_full_name: values.fullName,
+        customer_email: values.email,
+        customer_phone: values.mobile,
+        delivery_address: values.address,
+        delivery_city: values.city,
+        delivery_state: values.state,
+        delivery_pin: values.pin,
+        ordered_products: items,
+        order_total: order.total,
+        payment_method: values.paymentMethod,
+        payment_status: values.paymentMethod === 'Cash on Delivery' ? 'COD' : 'Pending',
+        order_status: 'New'
+      };
+
+      try{
+        const response = await fetch(`${supabaseUrl}/rest/v1/orders`, {
+          method: 'POST',
+          headers: {
+            apikey: supabaseAnonKey,
+            Authorization: `Bearer ${supabaseAnonKey}`,
+            'Content-Type': 'application/json',
+            Prefer: 'return=minimal'
+          },
+          body: JSON.stringify(payload)
+        });
+        if(!response.ok) throw new Error(`Order storage request failed with status ${response.status}`);
+        return true;
+      }catch(error){
+        console.error('Order could not be saved to the configured backend.', error);
+        return false;
+      }
+    }
+
     async function sendOrderNotification(values, order){
       try{
         const response = await fetch(orderNotificationEndpoint, {
@@ -1569,7 +1623,7 @@
       }
     }
 
-    function submitCheckout(event){
+    async function submitCheckout(event){
       event.preventDefault();
       if(checkoutSubmitting) return;
       const values = validateCheckoutForm();
@@ -1582,7 +1636,8 @@
       placeOrderButton.disabled = true;
       placeOrderButton.setAttribute('aria-busy', 'true');
       const order = showConfirmation(values);
-      sendOrderNotification(values, order);
+      await saveOrderToBackend(values, order);
+      await sendOrderNotification(values, order);
       checkoutStatus.textContent = '';
     }
 

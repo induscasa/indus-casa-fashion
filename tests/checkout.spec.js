@@ -232,6 +232,68 @@ test.describe('Indus Casa checkout flow', () => {
     await expect(page.locator('#placeOrderButton')).toBeDisabled();
   });
 
+  test('stores one complete COD order when Supabase is configured', async ({ page }) => {
+    await page.addInitScript(() => {
+      window.INDUS_CASA_SUPABASE = {
+        url: 'https://example.supabase.co',
+        anonKey: 'public-anon-test-key'
+      };
+    });
+    let storedOrder;
+    let storageRequestCount = 0;
+    await page.route('https://example.supabase.co/rest/v1/orders', async route => {
+      storageRequestCount += 1;
+      storedOrder = route.request().postDataJSON();
+      await route.fulfill({ status: 201, body: '' });
+    });
+    await page.route('https://formsubmit.co/ajax/induscasafashion@gmail.com', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true }) });
+    });
+
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.selectOption('#detail-size', 'M');
+    await page.click('#add-to-cart');
+    await page.click('#cartCheckout');
+    await page.fill('#checkoutFullName', 'Aarav Singh');
+    await page.fill('#checkoutMobile', '9876543210');
+    await page.fill('#checkoutEmail', 'aarav@example.com');
+    await page.fill('#checkoutAddress', '42 Garden Lane, Sector 18');
+    await page.fill('#checkoutCity', 'Jaipur');
+    await page.fill('#checkoutState', 'Rajasthan');
+    await page.fill('#checkoutPin', '302001');
+    await page.getByLabel('Cash on Delivery').check();
+
+    await page.evaluate(() => {
+      document.getElementById('checkoutForm').requestSubmit();
+      document.getElementById('checkoutForm').requestSubmit();
+    });
+    await expect(page.locator('#checkoutConfirmation')).toHaveClass(/visible/);
+    await expect.poll(() => storedOrder).toMatchObject({
+      customer_full_name: 'Aarav Singh',
+      customer_email: 'aarav@example.com',
+      customer_phone: '9876543210',
+      delivery_address: '42 Garden Lane, Sector 18',
+      delivery_city: 'Jaipur',
+      delivery_state: 'Rajasthan',
+      delivery_pin: '302001',
+      order_total: 1999,
+      payment_method: 'Cash on Delivery',
+      payment_status: 'COD',
+      order_status: 'New'
+    });
+    expect(storedOrder.order_reference).toMatch(/^IC-\d{6}$/);
+    expect(storedOrder.order_date_time).toBeTruthy();
+    expect(storedOrder.ordered_products).toEqual([{
+      product_slug: 'navy-signature',
+      product_name: 'Navy Signature',
+      variant_size: 'M',
+      quantity: 1,
+      unit_price: 1999,
+      item_subtotal: 1999
+    }]);
+    expect(storageRequestCount).toBe(1);
+  });
+
   test('submits complete order notification without blocking confirmation', async ({ page }) => {
     let notificationRequest;
     await page.route('https://formsubmit.co/ajax/induscasafashion@gmail.com', async route => {
