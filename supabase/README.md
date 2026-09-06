@@ -6,7 +6,8 @@ This project is a static GitHub Pages site, so it has no private server runtime.
 
 1. Create a Supabase project.
 2. Run `supabase/schema.sql` in the Supabase SQL Editor.
-3. Edit `supabase-config.js` with the project URL and public anon/publishable key:
+3. Run `supabase/admin-schema.sql` after `schema.sql`.
+4. Edit `supabase-config.js` with the project URL and public anon/publishable key:
 
 ```js
 window.INDUS_CASA_SUPABASE = {
@@ -20,5 +21,11 @@ Use only the public anon/publishable key. Never put a service-role key, database
 ## Security model
 
 The `orders` table accepts validated inserts for checkout, including only `New` orders and `Pending` or `COD` payment status. There is no public read, update, or delete policy, so customers cannot read other customers' orders. A future admin dashboard should use authenticated server-side access and its own RLS policies.
+
+## Admin foundation
+
+There is no public admin dashboard in this static site. Enable Supabase Auth, create an admin user in the Supabase dashboard, then add that user's Auth UUID to `public.admin_users` from a trusted Supabase SQL session. The admin migration grants authenticated admin members read access to orders and limits writes to `order_status` and `payment_status`. It does not grant public access or expose an admin password in the frontend.
+
+Supported order statuses are `New`, `Confirmed`, `Processing`, `Shipped`, `Delivered`, and `Cancelled`. Supported payment statuses are `Pending`, `COD`, `Paid`, `Failed`, and `Refunded`.
 
 Until both values are configured, the storefront keeps its existing confirmation and email notification flow and does not attempt a database request. The email recipient remains `induscasafashion@gmail.com`.
