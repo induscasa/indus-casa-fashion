@@ -140,7 +140,7 @@ test.describe('customer account flow', () => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([{
         order_reference: 'IC-123456',
         order_date_time: '2026-09-06T10:00:00.000Z',
-        ordered_products: [{ product_name: 'Navy Signature', variant_size: 'M', quantity: 1, unit_price: 1999 }],
+        ordered_products: [{ product_slug: 'navy-signature', product_name: 'Navy Signature', variant_size: 'M', quantity: 1, unit_price: 1999, item_subtotal: 1999 }],
         order_total: 1999,
         payment_method: 'Cash on Delivery',
         payment_status: 'COD',
@@ -158,6 +158,33 @@ test.describe('customer account flow', () => {
     await expect(page.locator('#accountOrders')).toContainText('Navy Signature');
     await expect(page.locator('#accountOrders')).toContainText('42 Garden Lane');
     await expect(page.locator('#accountOrders')).not.toContainText('another-customer-order');
+    await page.click('.account-order-toggle');
+    await expect(page.locator('.account-order-details')).toHaveClass(/open/);
+    await expect(page.locator('.account-order-details img')).toHaveAttribute('src', 'product-navy-detail.png');
+    await expect(page.locator('.account-order-details')).toContainText('Payment status');
+    await expect(page.locator('.account-order-details')).toContainText('302001');
+  });
+
+  test('reflects delivered progression and cancelled order status from Supabase', async ({ page }) => {
+    await page.route('https://example.supabase.co/auth/v1/token?grant_type=password', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(session) });
+    });
+    await page.route('https://example.supabase.co/rest/v1/orders**', async route => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([
+        { order_reference: 'IC-DELIVERED', order_date_time: '2026-09-06T10:00:00.000Z', ordered_products: [], order_total: 1999, payment_method: 'Cash on Delivery', payment_status: 'COD', order_status: 'Delivered', delivery_address: 'Delivered Road', delivery_city: 'Jaipur', delivery_state: 'Rajasthan', delivery_pin: '302001' },
+        { order_reference: 'IC-CANCELLED', order_date_time: '2026-09-05T10:00:00.000Z', ordered_products: [], order_total: 1999, payment_method: 'UPI', payment_status: 'Refunded', order_status: 'Cancelled', delivery_address: 'Cancelled Road', delivery_city: 'Jaipur', delivery_state: 'Rajasthan', delivery_pin: '302001' }
+      ]) });
+    });
+    await preparePage(page);
+    await openAccount(page);
+    await fillLogin(page);
+    const delivered = page.locator('.account-order').filter({ hasText: 'IC-DELIVERED' });
+    await expect(delivered.locator('.account-order-tracking')).toContainText('Delivered');
+    await expect(delivered.locator('.account-order-step.complete')).toHaveCount(5);
+    const cancelled = page.locator('.account-order').filter({ hasText: 'IC-CANCELLED' });
+    await expect(cancelled).toContainText('Order Cancelled');
+    await expect(cancelled.locator('.account-order-tracking')).toHaveCount(0);
+    await expect(cancelled).toContainText('Refunded');
   });
 
   test('associates a logged-in checkout order with the authenticated customer', async ({ page }) => {

@@ -624,6 +624,19 @@
     .account-order-value{font-size:12px;line-height:1.6;color:var(--ink);overflow-wrap:anywhere}
     .account-order-products{display:grid;gap:7px;margin-top:8px}
     .account-order-product{font-size:12px;line-height:1.5;color:var(--ink)}
+    .account-order-toggle{margin-top:16px;border:0;border-top:1px solid rgba(181,138,58,.18);padding-top:14px;background:transparent;color:#8d6d33;font:inherit;font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
+    .account-order-details{display:none;padding-top:16px}
+    .account-order-details.open{display:block}
+    .account-order-tracking{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:16px 0 20px}
+    .account-order-step{position:relative;display:grid;gap:7px;color:#9ca1a4;font-size:9px;line-height:1.3;text-align:center}
+    .account-order-step::before{content:"";display:block;width:14px;height:14px;margin:auto;border:1px solid rgba(181,138,58,.38);border-radius:50%;background:#fff}
+    .account-order-step.complete{color:#8d6d33}
+    .account-order-step.complete::before{border-color:#b58a3a;background:#b58a3a;box-shadow:inset 0 0 0 3px #fff}
+    .account-order-step.current{font-weight:700;color:var(--ink)}
+    .account-order-step.current::before{box-shadow:0 0 0 3px rgba(181,138,58,.18),inset 0 0 0 3px #fff}
+    .account-order-cancelled{margin:16px 0;padding:12px 14px;border:1px solid rgba(163,59,57,.3);color:#a33b39;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+    .account-order-image{width:58px;height:64px;object-fit:cover;background:#f1eee7}
+    .account-order-detail-product{display:grid;grid-template-columns:58px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(181,138,58,.12)}
     .account-empty{color:#5d646b;font-size:12px;line-height:1.8}
     .account-logout{cursor:pointer;margin-top:20px}
     @media (max-width:760px){
@@ -639,6 +652,11 @@
       .account-shell{padding:18px}
       .account-order-head{display:block}
       .account-order-meta{justify-content:flex-start;text-align:left;margin-top:7px}
+      .account-order-tracking{gap:2px}
+      .account-order-step{font-size:8px}
+      .account-order-detail-product{grid-template-columns:48px 1fr}
+      .account-order-detail-product strong{grid-column:2}
+      .account-order-image{width:48px;height:54px}
     }
     body.cart-open{overflow:hidden}
     .story-image{background-position:center}
@@ -1523,6 +1541,26 @@
       return Number.isNaN(date.getTime()) ? value : date.toLocaleString('en-IN', { dateStyle: 'medium', timeZone: 'Asia/Kolkata' });
     }
 
+    function getOrderStatusMarkup(status){
+      const statuses = ['New', 'Confirmed', 'Processing', 'Shipped', 'Delivered'];
+      if(status === 'Cancelled') return '<div class="account-order-cancelled">Order Cancelled</div>';
+      const currentIndex = Math.max(0, statuses.indexOf(status));
+      return `<div class="account-order-tracking" aria-label="Order status: ${escapeHtml(status)}">${statuses.map((step, index)=>`<span class="account-order-step ${index < currentIndex ? 'complete' : ''} ${index === currentIndex ? 'current complete' : ''}">${index < currentIndex ? '✓ ' : ''}${step === 'New' ? 'Order Placed' : step}</span>`).join('')}</div>`;
+    }
+
+    function getOrderProductMarkup(items){
+      return items.map(item=>{
+        const product = products[item.product_slug] || {};
+        const image = product.image || '';
+        const variant = item.variant_size || 'Not specified';
+        return `<div class="account-order-detail-product">
+          <img class="account-order-image" src="${escapeHtml(image)}" alt="${escapeHtml(item.product_name)}" loading="lazy" decoding="async">
+          <div><strong>${escapeHtml(item.product_name)}</strong><div class="account-order-value">Variant/size: ${escapeHtml(variant)} · Quantity: ${escapeHtml(item.quantity)} · Unit price: ${formatPrice(Number(item.unit_price || 0))}</div></div>
+          <strong>${formatPrice(Number(item.item_subtotal || Number(item.unit_price || 0) * Number(item.quantity || 0)))}</strong>
+        </div>`;
+      }).join('');
+    }
+
     function renderAccountOrders(orders){
       if(!orders.length){
         accountOrders.innerHTML = '<p class="account-empty">No orders are linked to this account yet.</p>';
@@ -1531,15 +1569,29 @@
       accountOrders.innerHTML = orders.map(order=>{
         const products = Array.isArray(order.ordered_products) ? order.ordered_products : [];
         const productMarkup = products.map(item => `<div class="account-order-product">${escapeHtml(item.product_name)} · Size/variant: ${escapeHtml(item.variant_size)} · Qty: ${escapeHtml(item.quantity)} · Unit price: ${formatPrice(Number(item.unit_price || 0))}</div>`).join('');
+        const detailProductMarkup = getOrderProductMarkup(products);
         return `<article class="account-order">
           <div class="account-order-head"><strong>${escapeHtml(order.order_reference)}</strong><div class="account-order-meta"><span>${escapeHtml(formatOrderDate(order.order_date_time))}</span><span>${escapeHtml(order.order_status)}</span></div></div>
+          ${getOrderStatusMarkup(order.order_status)}
           <div class="account-order-grid">
             <div class="account-order-block"><span class="account-order-label">Products</span><div class="account-order-products">${productMarkup || '<span class="account-order-value">No product details</span>'}</div></div>
             <div class="account-order-block"><span class="account-order-label">Total</span><span class="account-order-value">${formatPrice(Number(order.order_total || 0))}</span><span class="account-order-label">Payment</span><span class="account-order-value">${escapeHtml(order.payment_method)} · ${escapeHtml(order.payment_status)}</span></div>
             <div class="account-order-block"><span class="account-order-label">Shipping details</span><span class="account-order-value">${escapeHtml(order.delivery_address)}<br>${escapeHtml(order.delivery_city)}, ${escapeHtml(order.delivery_state)} - ${escapeHtml(order.delivery_pin)}</span></div>
           </div>
+          <button class="account-order-toggle" type="button" aria-expanded="false">View order details</button>
+          <div class="account-order-details">
+            <div class="account-order-block"><span class="account-order-label">Order reference</span><span class="account-order-value">${escapeHtml(order.order_reference)}</span><span class="account-order-label">Order date and time</span><span class="account-order-value">${escapeHtml(formatOrderDate(order.order_date_time))}</span><span class="account-order-label">Payment status</span><span class="account-order-value">${escapeHtml(order.payment_status)}</span></div>
+            <div class="account-order-products">${detailProductMarkup || '<span class="account-order-value">No product details</span>'}</div>
+            <div class="account-order-grid"><div class="account-order-block"><span class="account-order-label">Order total</span><span class="account-order-value">${formatPrice(Number(order.order_total || 0))}</span><span class="account-order-label">Payment method</span><span class="account-order-value">${escapeHtml(order.payment_method)}</span><span class="account-order-label">Current order status</span><span class="account-order-value">${escapeHtml(order.order_status)}</span></div><div class="account-order-block"><span class="account-order-label">Delivery details</span><span class="account-order-value">${escapeHtml(order.delivery_address)}<br>${escapeHtml(order.delivery_city)}, ${escapeHtml(order.delivery_state)} - ${escapeHtml(order.delivery_pin)}</span></div></div>
+          </div>
         </article>`;
       }).join('');
+      accountOrders.querySelectorAll('.account-order-toggle').forEach(button=>button.addEventListener('click', ()=>{
+        const details = button.nextElementSibling;
+        const isOpen = details.classList.toggle('open');
+        button.setAttribute('aria-expanded', String(isOpen));
+        button.textContent = isOpen ? 'Hide order details' : 'View order details';
+      }));
     }
 
     function showAccountView(view){
