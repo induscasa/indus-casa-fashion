@@ -9,6 +9,7 @@ test('Supabase order security keeps customer access insert-only and admin access
   expect(orderSchema).toContain('alter table public.orders enable row level security;');
   expect(orderSchema).toContain('grant insert on table public.orders to anon, authenticated;');
   expect(orderSchema).toContain('for insert\nto anon, authenticated');
+  expect(orderSchema).toContain("check (customer_phone ~ '^\\+?[0-9][0-9 -]{9,14}$')");
   expect(adminSchema).toContain('alter table public.admin_users enable row level security;');
   expect(adminSchema).toContain('for select\nto authenticated');
   expect(adminSchema).toContain('grant update (order_status, payment_status) on table public.orders to authenticated;');

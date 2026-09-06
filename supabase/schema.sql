@@ -4,7 +4,7 @@ create table if not exists public.orders (
   order_date_time timestamptz not null,
   customer_full_name text not null check (char_length(customer_full_name) between 2 and 120),
   customer_email text not null check (customer_email ~* '^[^@[:space:]]+@[^@[:space:]]+\.[^@[:space:]]+$'),
-  customer_phone text not null check (customer_phone ~ '^\\+?[0-9][0-9 -]{9,14}$'),
+  customer_phone text not null check (customer_phone ~ '^\+?[0-9][0-9 -]{9,14}$'),
   delivery_address text not null check (char_length(delivery_address) between 5 and 500),
   delivery_city text not null check (char_length(delivery_city) between 2 and 100),
   delivery_state text not null check (char_length(delivery_state) between 2 and 100),
@@ -16,6 +16,10 @@ create table if not exists public.orders (
   order_status text not null default 'New' check (order_status in ('New', 'Confirmed', 'Processing', 'Shipped', 'Delivered', 'Cancelled')),
   created_at timestamptz not null default timezone('utc', now())
 );
+
+alter table public.orders drop constraint if exists orders_customer_phone_check;
+alter table public.orders add constraint orders_customer_phone_check
+  check (customer_phone ~ '^\+?[0-9][0-9 -]{9,14}$');
 
 alter table public.orders enable row level security;
 
