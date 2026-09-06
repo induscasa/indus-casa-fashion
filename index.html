@@ -1140,6 +1140,7 @@
     const pageTwitterDescription = document.getElementById('page-twitter-description');
     const pageTwitterImage = document.getElementById('page-twitter-image');
     const cartStorageKey = 'indus-casa-cart';
+    const orderNotificationEndpoint = 'https://formsubmit.co/ajax/induscasafashion@gmail.com';
     let currentProductSlug = '';
     let lastCheckout = null;
 
@@ -1388,6 +1389,7 @@
       }, 0);
 
       const ref = createReference();
+      const orderDate = new Date().toISOString();
       confirmationReference.textContent = ref;
       confirmationTotal.textContent = formatPrice(total);
       confirmationPayment.textContent = values.paymentMethod;
@@ -1408,7 +1410,42 @@
       checkoutFormView.style.display = 'none';
       checkoutConfirmation.classList.add('visible');
       confirmationClose.focus();
-      lastCheckout = { reference: ref, total, payment: values.paymentMethod };
+      lastCheckout = { reference: ref, total, payment: values.paymentMethod, orderDate };
+      return { reference: ref, total, orderDate };
+    }
+
+    function getOrderNotification(values, order){
+      const items = cart.map(item=>{
+        const product = products[item.slug];
+        return `${product.name} | Size/variant: ${item.size} | Quantity: ${item.quantity} | Individual price: ${formatPrice(product.sellingPrice)} | Line total: ${formatPrice(product.sellingPrice * item.quantity)}`;
+      }).join('\n');
+
+      return {
+        _subject: `New Indus Casa order ${order.reference}`,
+        _replyto: values.email,
+        order_reference: order.reference,
+        customer_name: values.fullName,
+        customer_email: values.email,
+        customer_phone: values.mobile,
+        delivery_address: `${values.address}, ${values.city}, ${values.state} - ${values.pin}`,
+        ordered_products: items,
+        total_order_amount: formatPrice(order.total),
+        payment_method: values.paymentMethod,
+        order_date_time: new Date(order.orderDate).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+      };
+    }
+
+    async function sendOrderNotification(values, order){
+      try{
+        const response = await fetch(orderNotificationEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(getOrderNotification(values, order))
+        });
+        if(!response.ok) throw new Error(`Notification request failed with status ${response.status}`);
+      }catch(error){
+        console.error('Order confirmation email could not be sent. The order remains confirmed locally.', error);
+      }
     }
 
     function submitCheckout(event){
@@ -1419,7 +1456,8 @@
         return;
       }
 
-      showConfirmation(values);
+      const order = showConfirmation(values);
+      sendOrderNotification(values, order);
       checkoutStatus.textContent = '';
     }
 

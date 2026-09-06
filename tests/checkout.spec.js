@@ -154,4 +154,58 @@ test.describe('Indus Casa checkout flow', () => {
     await page.click('#confirmationClose');
     await expect(page.locator('#checkoutModal')).not.toHaveClass(/open/);
   });
+
+  test('submits complete order notification without blocking confirmation', async ({ page }) => {
+    let notificationRequest;
+    await page.route('https://formsubmit.co/ajax/induscasafashion@gmail.com', async route => {
+      notificationRequest = route.request().postDataJSON();
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true }) });
+    });
+
+    await page.selectOption('#detail-size', 'M');
+    await page.click('#add-to-cart');
+    await page.click('#cartCheckout');
+    await page.fill('#checkoutFullName', 'Aarav Singh');
+    await page.fill('#checkoutMobile', '9876543210');
+    await page.fill('#checkoutEmail', 'aarav@example.com');
+    await page.fill('#checkoutAddress', '42 Garden Lane, Sector 18');
+    await page.fill('#checkoutCity', 'Jaipur');
+    await page.fill('#checkoutState', 'Rajasthan');
+    await page.fill('#checkoutPin', '302001');
+    await page.getByLabel('Cash on Delivery').check();
+
+    await page.click('#placeOrderButton');
+    await expect(page.locator('#checkoutConfirmation')).toHaveClass(/visible/);
+    await expect.poll(() => notificationRequest).toMatchObject({
+      customer_name: 'Aarav Singh',
+      customer_email: 'aarav@example.com',
+      customer_phone: '9876543210',
+      delivery_address: '42 Garden Lane, Sector 18, Jaipur, Rajasthan - 302001',
+      ordered_products: expect.stringContaining('Navy Signature | Size/variant: M | Quantity: 1 | Individual price: ₹1,999'),
+      total_order_amount: '₹1,999',
+      payment_method: 'Cash on Delivery'
+    });
+    await expect(notificationRequest.order_reference).toMatch(/^IC-\d{6}$/);
+    await expect(notificationRequest.order_date_time).toBeTruthy();
+  });
+
+  test('keeps confirmation when notification service fails', async ({ page }) => {
+    await page.route('https://formsubmit.co/ajax/induscasafashion@gmail.com', route => route.abort());
+    await page.selectOption('#detail-size', 'M');
+    await page.click('#add-to-cart');
+    await page.click('#cartCheckout');
+    await page.fill('#checkoutFullName', 'Aarav Singh');
+    await page.fill('#checkoutMobile', '9876543210');
+    await page.fill('#checkoutEmail', 'aarav@example.com');
+    await page.fill('#checkoutAddress', '42 Garden Lane, Sector 18');
+    await page.fill('#checkoutCity', 'Jaipur');
+    await page.fill('#checkoutState', 'Rajasthan');
+    await page.fill('#checkoutPin', '302001');
+    await page.getByLabel('UPI').check();
+
+    await page.click('#placeOrderButton');
+    await expect(page.locator('#checkoutConfirmation')).toHaveClass(/visible/);
+    await expect(page.locator('#confirmationReference')).toContainText('IC-');
+    await expect(page.locator('#cartCount')).toHaveText('1');
+  });
 });
