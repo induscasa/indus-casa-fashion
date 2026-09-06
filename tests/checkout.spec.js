@@ -84,6 +84,30 @@ test.describe('Indus Casa checkout flow', () => {
     await expect(page.locator('#checkoutDiscountTotal')).toHaveText('- ₹2,000');
   });
 
+  test('cart controls update line subtotals, persist, remove items, and show empty state', async ({ page }) => {
+    await page.selectOption('#detail-size', 'M');
+    await page.click('#add-to-cart');
+    const cartItem = page.locator('[data-cart-key="navy-signature|M"]');
+
+    await expect(cartItem.locator('.cart-line-total')).toHaveText('Item subtotal: ₹1,999');
+    await cartItem.locator('[data-action="increase"]').click();
+    await expect(cartItem.locator('.cart-quantity span')).toHaveText('2');
+    await expect(cartItem.locator('.cart-line-total')).toHaveText('Item subtotal: ₹3,998');
+    await expect(page.locator('#cartTotal')).toHaveText('₹3,998');
+    await expect(page.locator('#cartFinalTotal')).toHaveText('₹3,998');
+
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.click('#cartToggle');
+    await expect(page.locator('[data-cart-key="navy-signature|M"] .cart-quantity span')).toHaveText('2');
+
+    await page.locator('[data-cart-key="navy-signature|M"] [data-action="decrease"]').click();
+    await expect(page.locator('[data-cart-key="navy-signature|M"] .cart-quantity span')).toHaveText('1');
+    await page.locator('[data-cart-key="navy-signature|M"] [data-action="remove"]').click();
+    await expect(page.locator('#cartItems')).toContainText('Your cart is currently empty.');
+    await expect(page.locator('#cartCheckout')).toBeDisabled();
+    await expect(page.locator('#cartCount')).toHaveText('0');
+  });
+
   test('multiple products recalculate cart and checkout totals', async ({ page }) => {
     await page.goto('http://localhost:8000/#product/navy-signature');
     await page.selectOption('#detail-size', 'S');
