@@ -29,3 +29,9 @@ There is no public admin dashboard in this static site. Enable Supabase Auth, cr
 Supported order statuses are `New`, `Confirmed`, `Processing`, `Shipped`, `Delivered`, and `Cancelled`. Supported payment statuses are `Pending`, `COD`, `Paid`, `Failed`, and `Refunded`.
 
 Until both values are configured, the storefront keeps its existing confirmation and email notification flow and does not attempt a database request. The email recipient remains `induscasafashion@gmail.com`.
+
+## Customer accounts
+
+The storefront uses Supabase Auth email/password endpoints with the same public key. Rerun `supabase/schema.sql` and then `supabase/admin-schema.sql` after deploying this version so existing orders receive the nullable `customer_id` field and customer-owned order policy. Guest orders remain supported with a null `customer_id`.
+
+In Supabase Authentication settings, configure the site URL and add the deployed storefront URL to the redirect allow list. The password reset flow returns to the storefront URL with a recovery session. Email confirmation may remain enabled; users must confirm their email before logging in when that setting is active.

@@ -277,6 +277,7 @@ test.describe('Indus Casa checkout flow', () => {
       delivery_state: 'Rajasthan',
       delivery_pin: '302001',
       order_total: 1999,
+      customer_id: null,
       payment_method: 'Cash on Delivery',
       payment_status: 'COD',
       order_status: 'New'

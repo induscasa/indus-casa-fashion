@@ -21,10 +21,14 @@ alter table public.orders drop constraint if exists orders_customer_phone_check;
 alter table public.orders add constraint orders_customer_phone_check
   check (customer_phone ~ '^\+?[0-9][0-9 -]{9,14}$');
 
+alter table public.orders
+  add column if not exists customer_id uuid references auth.users(id) on delete set null;
+
 alter table public.orders enable row level security;
 
 revoke all on table public.orders from anon, authenticated;
 grant insert on table public.orders to anon, authenticated;
+grant select on table public.orders to authenticated;
 
 drop policy if exists "Public customers can create valid orders" on public.orders;
 create policy "Public customers can create valid orders"
@@ -35,7 +39,16 @@ with check (
   order_status = 'New'
   and payment_status in ('Pending', 'COD')
   and jsonb_array_length(ordered_products) > 0
+  and (customer_id is null or customer_id = auth.uid())
 );
 
--- There is intentionally no public SELECT, UPDATE, or DELETE policy.
+drop policy if exists "Customers can view their own orders" on public.orders;
+create policy "Customers can view their own orders"
+on public.orders
+for select
+to authenticated
+using (customer_id = auth.uid());
+
+-- Anonymous users have no SELECT, UPDATE, or DELETE policy; authenticated
+-- customers can only SELECT rows linked to their own auth user.
 -- A future authenticated admin service can use a controlled server-side role.

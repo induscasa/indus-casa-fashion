@@ -590,6 +590,42 @@
     .confirmation-block strong{font-size:22px;font-family:var(--serif);font-weight:500}
     .confirmation-message{margin-top:20px;font-size:14px;line-height:1.8;color:var(--muted)}
     .confirmation-message strong{color:var(--gold-soft)}
+    .account-toggle{display:inline-flex;align-items:center;border:0;background:transparent;color:var(--white);font-size:10px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:color .25s ease}
+    .account-toggle:hover{color:var(--gold-soft)}
+    .account-modal{position:fixed;inset:0;z-index:990;background:rgba(3,8,13,.72);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease;display:flex;align-items:center;justify-content:center;padding:24px}
+    .account-modal.open{opacity:1;visibility:visible}
+    .account-shell{width:min(940px,100%);max-height:92vh;overflow:auto;background:#0d1d2c;color:var(--white);border:1px solid var(--line);box-shadow:var(--shadow);padding:24px}
+    .account-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+    .account-head h2{font-family:var(--serif);font-size:clamp(34px,4vw,48px);font-weight:500}
+    .account-close{width:36px;height:36px;border:1px solid rgba(234,211,155,.42);background:transparent;color:var(--white);cursor:pointer}
+    .account-view{display:none}
+    .account-view.active{display:block}
+    .account-auth-form{max-width:500px;margin:auto}
+    .account-auth-form h3,.account-section h3{font-family:var(--serif);font-size:30px;font-weight:500;margin-bottom:14px}
+    .account-auth-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+    .account-auth-actions .btn{cursor:pointer}
+    .account-link{border:0;background:transparent;color:var(--gold-soft);font:inherit;font-size:11px;cursor:pointer;padding:8px 0;text-decoration:underline;text-underline-offset:3px}
+    .account-status{min-height:20px;margin-top:14px;color:var(--gold-soft);font-size:12px;line-height:1.6}
+    .account-status.error{color:#bd4d4d}
+    .account-layout{display:grid;grid-template-columns:minmax(220px,.7fr) minmax(0,1.3fr);gap:24px}
+    .account-section{background:#fbfaf7;color:var(--ink);border:1px solid rgba(181,138,58,.20);padding:20px}
+    .account-section h3{color:var(--ink)}
+    .account-profile{display:grid;gap:13px}
+    .account-profile-row{display:grid;gap:4px;padding-bottom:12px;border-bottom:1px solid rgba(181,138,58,.16)}
+    .account-profile-row span,.account-order-label{font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:#8d6d33}
+    .account-profile-row strong{font-size:13px;font-weight:500;overflow-wrap:anywhere}
+    .account-orders{display:grid;gap:16px}
+    .account-order{border:1px solid rgba(181,138,58,.18);padding:16px;background:#fff}
+    .account-order-head{display:flex;align-items:start;justify-content:space-between;gap:14px;padding-bottom:12px;border-bottom:1px solid rgba(181,138,58,.16)}
+    .account-order-head strong{font-family:var(--serif);font-size:25px;font-weight:500}
+    .account-order-meta{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;font-size:10px;color:#5d646b;text-align:right}
+    .account-order-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+    .account-order-block{display:grid;gap:5px}
+    .account-order-value{font-size:12px;line-height:1.6;color:var(--ink);overflow-wrap:anywhere}
+    .account-order-products{display:grid;gap:7px;margin-top:8px}
+    .account-order-product{font-size:12px;line-height:1.5;color:var(--ink)}
+    .account-empty{color:#5d646b;font-size:12px;line-height:1.8}
+    .account-logout{cursor:pointer;margin-top:20px}
     @media (max-width:760px){
       .checkout-layout{grid-template-columns:1fr}
       .field-grid{grid-template-columns:1fr}
@@ -598,6 +634,11 @@
       .checkout-head{padding-bottom:12px}
       .checkout-actions{flex-direction:column}
       .checkout-actions .btn{width:100%}
+      .account-layout{grid-template-columns:1fr}
+      .account-order-grid{grid-template-columns:1fr}
+      .account-shell{padding:18px}
+      .account-order-head{display:block}
+      .account-order-meta{justify-content:flex-start;text-align:left;margin-top:7px}
     }
     body.cart-open{overflow:hidden}
     .story-image{background-position:center}
@@ -641,6 +682,8 @@
       .detail-specs{grid-template-columns:1fr}
       .cart-toggle{font-size:0;letter-spacing:0}
       .cart-toggle::before{content:"Cart";font-size:10px;letter-spacing:.16em}
+      .account-toggle{font-size:0;letter-spacing:0}
+      .account-toggle::before{content:"Account";font-size:10px;letter-spacing:.16em}
       .cart-drawer{padding:24px 20px}
     }
     body.detail-view main>section:not(.detail-page),body.detail-view footer{display:none}
@@ -733,6 +776,12 @@
     .payment-option{background:#fff;color:var(--ink);border-color:rgba(181,138,58,.24)}
     .confirmation-block{background:#f1eee7;border-color:rgba(181,138,58,.18)}
     .confirmation-block strong{color:var(--ink)}
+    .account-shell{background:#fff;color:var(--ink);box-shadow:-25px 0 70px rgba(28,32,36,.18)}
+    .account-head{border-color:var(--line)}
+    .account-head h2{color:var(--ink)}
+    .account-close{color:var(--ink);border-color:rgba(181,138,58,.4)}
+    .account-auth-form h3{color:var(--ink)}
+    .account-status.error{color:#a33b39}
     .mobile-nav{background:rgba(255,255,255,.98);border-color:rgba(181,138,58,.35);box-shadow:0 24px 60px rgba(28,32,36,.14)}
     .mobile-nav a{color:var(--ink)}
     @media (max-width:600px){.hero{min-height:820px}.hero-bg{background-position:68% center}.hero-content{padding-top:80px}}
@@ -754,6 +803,7 @@
       </ul>
     </nav>
     <div class="nav-actions">
+      <button class="account-toggle" id="accountToggle" type="button" aria-label="Open my account">My Account</button>
       <button class="cart-toggle" id="cartToggle" type="button" aria-label="Open shopping cart">My Cart <span class="cart-count" id="cartCount">0</span></button>
       <a class="nav-instagram" href="https://www.instagram.com/induscasafashion" target="_blank" rel="noopener" aria-label="Indus Casa on Instagram">
         <span aria-hidden="true">◎</span>
@@ -766,6 +816,7 @@
       <a href="#watches">Watches</a>
       <a href="#house">The House</a>
       <a href="#order">Enquire</a>
+      <a href="#account" id="mobileAccountLink">My Account</a>
     </div>
   </header>
 
@@ -785,6 +836,84 @@
         <button class="btn ghost" id="continueShopping" type="button">Continue Shopping</button>
       </div>
     </aside>
+  </div>
+
+  <div class="account-modal" id="accountModal" aria-hidden="true">
+    <div class="account-shell" role="dialog" aria-modal="true" aria-labelledby="accountTitle">
+      <div class="account-head">
+        <h2 id="accountTitle">My Account</h2>
+        <button class="account-close" id="accountClose" type="button" aria-label="Close account">×</button>
+      </div>
+
+      <div class="account-view active" id="accountAuthView">
+        <form class="account-auth-form" id="accountAuthForm" novalidate>
+          <h3 id="accountFormTitle">Login</h3>
+          <div class="field">
+            <label for="accountEmail">Email Address</label>
+            <input id="accountEmail" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field" id="accountNameField" hidden>
+            <label for="accountFullName">Full Name</label>
+            <input id="accountFullName" name="fullName" type="text" autocomplete="name" />
+          </div>
+          <div class="field" id="accountMobileField" hidden>
+            <label for="accountMobile">Mobile Number</label>
+            <input id="accountMobile" name="mobile" type="tel" inputmode="numeric" autocomplete="tel" />
+          </div>
+          <div class="field" id="accountPasswordField">
+            <label for="accountPassword">Password</label>
+            <input id="accountPassword" name="password" type="password" autocomplete="current-password" />
+          </div>
+          <div class="field" id="accountConfirmPasswordField" hidden>
+            <label for="accountConfirmPassword">Confirm Password</label>
+            <input id="accountConfirmPassword" name="confirmPassword" type="password" autocomplete="new-password" />
+          </div>
+          <div class="account-auth-actions">
+            <button class="btn gold" id="accountSubmit" type="submit">Login</button>
+            <button class="account-link" id="accountModeToggle" type="button">Create an account</button>
+            <button class="account-link" id="accountForgot" type="button">Forgot password?</button>
+          </div>
+          <div class="account-status" id="accountStatus" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <div class="account-view" id="accountRecoveryView">
+        <form class="account-auth-form" id="accountRecoveryForm" novalidate>
+          <h3>Set a new password</h3>
+          <div class="field">
+            <label for="accountNewPassword">New Password</label>
+            <input id="accountNewPassword" type="password" autocomplete="new-password" required />
+          </div>
+          <div class="field">
+            <label for="accountNewPasswordConfirm">Confirm New Password</label>
+            <input id="accountNewPasswordConfirm" type="password" autocomplete="new-password" required />
+          </div>
+          <div class="account-auth-actions">
+            <button class="btn gold" type="submit">Update Password</button>
+          </div>
+          <div class="account-status" id="accountRecoveryStatus" aria-live="polite"></div>
+        </form>
+      </div>
+
+      <div class="account-view" id="accountDashboardView">
+        <div class="account-layout">
+          <section class="account-section" aria-labelledby="accountProfileTitle">
+            <h3 id="accountProfileTitle">My Profile</h3>
+            <div class="account-profile">
+              <div class="account-profile-row"><span>Full name</span><strong id="accountProfileName"></strong></div>
+              <div class="account-profile-row"><span>Email</span><strong id="accountProfileEmail"></strong></div>
+              <div class="account-profile-row"><span>Mobile number</span><strong id="accountProfileMobile"></strong></div>
+            </div>
+            <button class="btn ghost account-logout" id="accountLogout" type="button">Logout</button>
+          </section>
+          <section class="account-section" aria-labelledby="accountOrdersTitle">
+            <h3 id="accountOrdersTitle">My Orders</h3>
+            <div class="account-orders" id="accountOrders" aria-live="polite"></div>
+            <div class="account-status" id="accountOrdersStatus" aria-live="polite"></div>
+          </section>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="checkout-modal" id="checkoutModal" aria-hidden="true">
@@ -1213,6 +1342,34 @@
     const cartTotalLabel = document.getElementById('cartTotalLabel');
     const cartTotal = document.getElementById('cartTotal');
     const cartFinalTotal = document.getElementById('cartFinalTotal');
+    const accountToggle = document.getElementById('accountToggle');
+    const accountModal = document.getElementById('accountModal');
+    const accountClose = document.getElementById('accountClose');
+    const mobileAccountLink = document.getElementById('mobileAccountLink');
+    const accountAuthView = document.getElementById('accountAuthView');
+    const accountRecoveryView = document.getElementById('accountRecoveryView');
+    const accountDashboardView = document.getElementById('accountDashboardView');
+    const accountAuthForm = document.getElementById('accountAuthForm');
+    const accountFormTitle = document.getElementById('accountFormTitle');
+    const accountNameField = document.getElementById('accountNameField');
+    const accountMobileField = document.getElementById('accountMobileField');
+    const accountPasswordField = document.getElementById('accountPasswordField');
+    const accountConfirmPasswordField = document.getElementById('accountConfirmPasswordField');
+    const accountPassword = document.getElementById('accountPassword');
+    const accountSubmit = document.getElementById('accountSubmit');
+    const accountModeToggle = document.getElementById('accountModeToggle');
+    const accountForgot = document.getElementById('accountForgot');
+    const accountStatus = document.getElementById('accountStatus');
+    const accountRecoveryForm = document.getElementById('accountRecoveryForm');
+    const accountRecoveryStatus = document.getElementById('accountRecoveryStatus');
+    const accountNewPassword = document.getElementById('accountNewPassword');
+    const accountNewPasswordConfirm = document.getElementById('accountNewPasswordConfirm');
+    const accountProfileName = document.getElementById('accountProfileName');
+    const accountProfileEmail = document.getElementById('accountProfileEmail');
+    const accountProfileMobile = document.getElementById('accountProfileMobile');
+    const accountLogout = document.getElementById('accountLogout');
+    const accountOrders = document.getElementById('accountOrders');
+    const accountOrdersStatus = document.getElementById('accountOrdersStatus');
     const checkoutModal = document.getElementById('checkoutModal');
     const checkoutClose = document.getElementById('checkoutClose');
     const checkoutBack = document.getElementById('checkoutBack');
@@ -1245,11 +1402,15 @@
     const pageTwitterDescription = document.getElementById('page-twitter-description');
     const pageTwitterImage = document.getElementById('page-twitter-image');
     const cartStorageKey = 'indus-casa-cart';
+    const authStorageKey = 'indus-casa-auth-session';
     const orderNotificationEndpoint = 'https://formsubmit.co/ajax/induscasafashion@gmail.com';
     const supabaseConfig = window.INDUS_CASA_SUPABASE || {};
     let currentProductSlug = '';
     let lastCheckout = null;
     let checkoutSubmitting = false;
+    let accountMode = 'login';
+    let authSession = loadAuthSession();
+    let authUser = null;
 
     const products = {
       'navy-signature': {name:'Navy Signature', category:'Signature Pieces', colour:'Midnight Navy', image:'product-navy-detail.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'A rich navy expression with the Indus Casa gold mark, composed for quiet confidence and everyday ease.', specs:[]},
@@ -1263,6 +1424,272 @@
       'indus-casa-royal-blue': {name:'Indus Casa Royal Blue', category:'Watches', colour:'Deep blue dial · Gold-tone case', image:'royal-blue.png', sizes:['One Size'], marketPrice:2149, sellingPrice:1149, description:'Designed for timeless everyday elegance, the Indus Casa Royal Blue brings together a deep blue dial, gold-tone case and brown leather strap. Built with 3ATM water resistance, sapphire coated glass, precise quartz movement and a date function.', specs:['Deep blue dial','Gold-tone case','Brown leather strap','3ATM Water Resistant','Sapphire Coated Glass','Precise Quartz Movement','Date Function']}
     };
     let cart = loadCart();
+
+    function getSupabaseBaseUrl(){
+      return String(supabaseConfig.url || '').replace(/\/$/, '');
+    }
+
+    function getSupabaseAnonKey(){
+      return String(supabaseConfig.anonKey || '');
+    }
+
+    function loadAuthSession(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(authStorageKey) || 'null');
+        return saved && saved.access_token && saved.refresh_token ? saved : null;
+      }catch(error){
+        return null;
+      }
+    }
+
+    function persistAuthSession(session){
+      authSession = session;
+      if(session) localStorage.setItem(authStorageKey, JSON.stringify(session));
+      else localStorage.removeItem(authStorageKey);
+    }
+
+    async function supabaseAuthRequest(path, options = {}, session = authSession){
+      const baseUrl = getSupabaseBaseUrl();
+      const anonKey = getSupabaseAnonKey();
+      if(!baseUrl || !anonKey) throw new Error('Customer account service is not configured.');
+      const headers = {
+        apikey: anonKey,
+        'Content-Type': 'application/json',
+        ...(options.headers || {})
+      };
+      if(session?.access_token) headers.Authorization = `Bearer ${session.access_token}`;
+      const response = await fetch(`${baseUrl}${path}`, { ...options, headers });
+      const bodyText = await response.text();
+      let body = null;
+      try{ body = bodyText ? JSON.parse(bodyText) : null; }catch(error){ body = null; }
+      if(!response.ok){
+        throw new Error(body?.msg || body?.message || body?.error_description || `Account request failed with status ${response.status}`);
+      }
+      return body;
+    }
+
+    async function refreshAuthSession(){
+      if(!authSession?.refresh_token) return false;
+      try{
+        const session = await supabaseAuthRequest('/auth/v1/token?grant_type=refresh_token', {
+          method: 'POST',
+          body: JSON.stringify({ refresh_token: authSession.refresh_token })
+        }, null);
+        persistAuthSession(session);
+        authUser = session.user || null;
+        return true;
+      }catch(error){
+        persistAuthSession(null);
+        authUser = null;
+        return false;
+      }
+    }
+
+    async function restoreAuthSession(){
+      if(!authSession) return;
+      try{
+        authUser = await supabaseAuthRequest('/auth/v1/user', { method: 'GET' });
+      }catch(error){
+        await refreshAuthSession();
+      }
+    }
+
+    async function fetchCustomerOrders(){
+      if(!authSession?.access_token || !authUser?.id) return [];
+      const params = new URLSearchParams({
+        select: 'order_reference,order_date_time,ordered_products,order_total,payment_method,payment_status,order_status,delivery_address,delivery_city,delivery_state,delivery_pin',
+        customer_id: `eq.${authUser.id}`,
+        order: 'order_date_time.desc'
+      });
+      const response = await fetch(`${getSupabaseBaseUrl()}/rest/v1/orders?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+          apikey: getSupabaseAnonKey(),
+          Authorization: `Bearer ${authSession.access_token}`,
+          Accept: 'application/json'
+        }
+      });
+      const body = await response.json().catch(() => null);
+      if(!response.ok) throw new Error(body?.message || `Orders request failed with status ${response.status}`);
+      return Array.isArray(body) ? body : [];
+    }
+
+    function escapeHtml(value){
+      return String(value ?? '').replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
+    }
+
+    function formatOrderDate(value){
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? value : date.toLocaleString('en-IN', { dateStyle: 'medium', timeZone: 'Asia/Kolkata' });
+    }
+
+    function renderAccountOrders(orders){
+      if(!orders.length){
+        accountOrders.innerHTML = '<p class="account-empty">No orders are linked to this account yet.</p>';
+        return;
+      }
+      accountOrders.innerHTML = orders.map(order=>{
+        const products = Array.isArray(order.ordered_products) ? order.ordered_products : [];
+        const productMarkup = products.map(item => `<div class="account-order-product">${escapeHtml(item.product_name)} · Size/variant: ${escapeHtml(item.variant_size)} · Qty: ${escapeHtml(item.quantity)} · Unit price: ${formatPrice(Number(item.unit_price || 0))}</div>`).join('');
+        return `<article class="account-order">
+          <div class="account-order-head"><strong>${escapeHtml(order.order_reference)}</strong><div class="account-order-meta"><span>${escapeHtml(formatOrderDate(order.order_date_time))}</span><span>${escapeHtml(order.order_status)}</span></div></div>
+          <div class="account-order-grid">
+            <div class="account-order-block"><span class="account-order-label">Products</span><div class="account-order-products">${productMarkup || '<span class="account-order-value">No product details</span>'}</div></div>
+            <div class="account-order-block"><span class="account-order-label">Total</span><span class="account-order-value">${formatPrice(Number(order.order_total || 0))}</span><span class="account-order-label">Payment</span><span class="account-order-value">${escapeHtml(order.payment_method)} · ${escapeHtml(order.payment_status)}</span></div>
+            <div class="account-order-block"><span class="account-order-label">Shipping details</span><span class="account-order-value">${escapeHtml(order.delivery_address)}<br>${escapeHtml(order.delivery_city)}, ${escapeHtml(order.delivery_state)} - ${escapeHtml(order.delivery_pin)}</span></div>
+          </div>
+        </article>`;
+      }).join('');
+    }
+
+    function showAccountView(view){
+      [accountAuthView, accountRecoveryView, accountDashboardView].forEach(element=>element.classList.remove('active'));
+      view.classList.add('active');
+    }
+
+    function setAccountStatus(element, message, isError = false){
+      element.textContent = message;
+      element.classList.toggle('error', isError);
+    }
+
+    function renderAccountProfile(){
+      const metadata = authUser?.user_metadata || {};
+      accountProfileName.textContent = metadata.full_name || 'Not provided';
+      accountProfileEmail.textContent = authUser?.email || '';
+      accountProfileMobile.textContent = metadata.mobile || 'Not provided';
+    }
+
+    async function loadAccountDashboard(){
+      renderAccountProfile();
+      accountOrders.innerHTML = '';
+      setAccountStatus(accountOrdersStatus, 'Loading orders...');
+      try{
+        renderAccountOrders(await fetchCustomerOrders());
+        setAccountStatus(accountOrdersStatus, '');
+      }catch(error){
+        setAccountStatus(accountOrdersStatus, error.message, true);
+      }
+    }
+
+    function openAccount(){
+      if(authUser && authSession){
+        showAccountView(accountDashboardView);
+        loadAccountDashboard();
+      }else if(!accountRecoveryView.classList.contains('active')){
+        showAccountView(accountAuthView);
+      }
+      accountModal.classList.add('open');
+      accountModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('cart-open');
+      if(!authUser) document.getElementById('accountEmail').focus();
+    }
+
+    function closeAccount(){
+      accountModal.classList.remove('open');
+      accountModal.setAttribute('aria-hidden', 'true');
+      if(!cartOverlay.classList.contains('open') && !checkoutModal.classList.contains('open')) document.body.classList.remove('cart-open');
+    }
+
+    async function submitAccountAuth(event){
+      event.preventDefault();
+      setAccountStatus(accountStatus, '');
+      const email = document.getElementById('accountEmail').value.trim();
+      const password = accountPassword.value;
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        setAccountStatus(accountStatus, 'Please enter a valid email address.', true);
+        return;
+      }
+      if(accountMode === 'login'){
+        if(!password){ setAccountStatus(accountStatus, 'Please enter your password.', true); return; }
+        try{
+          const session = await supabaseAuthRequest('/auth/v1/token?grant_type=password', { method: 'POST', body: JSON.stringify({ email, password }) }, null);
+          persistAuthSession(session);
+          authUser = session.user;
+          showAccountView(accountDashboardView);
+          await loadAccountDashboard();
+        }catch(error){ setAccountStatus(accountStatus, error.message, true); }
+        return;
+      }
+      const fullName = document.getElementById('accountFullName').value.trim();
+      const mobile = document.getElementById('accountMobile').value.trim();
+      const confirmPassword = document.getElementById('accountConfirmPassword').value;
+      if(fullName.length < 2 || !/^\+?(?:91)?[6-9]\d{9}$/.test(mobile.replace(/[\s-]/g, ''))){
+        setAccountStatus(accountStatus, 'Please enter your name and a valid mobile number.', true);
+        return;
+      }
+      if(password.length < 6 || password !== confirmPassword){
+        setAccountStatus(accountStatus, 'Passwords must match and contain at least 6 characters.', true);
+        return;
+      }
+      try{
+        const result = await supabaseAuthRequest('/auth/v1/signup', { method: 'POST', body: JSON.stringify({ email, password, data: { full_name: fullName, mobile } }) }, null);
+        if(result.access_token){
+          persistAuthSession(result);
+          authUser = result.user;
+          showAccountView(accountDashboardView);
+          await loadAccountDashboard();
+        }else{
+          setAccountStatus(accountStatus, 'Account created. Check your email to confirm your account, then log in.');
+        }
+      }catch(error){ setAccountStatus(accountStatus, error.message, true); }
+    }
+
+    async function submitPasswordResetRequest(){
+      const email = document.getElementById('accountEmail').value.trim();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        setAccountStatus(accountStatus, 'Enter your account email first.', true);
+        return;
+      }
+      try{
+        await supabaseAuthRequest('/auth/v1/recover', { method: 'POST', body: JSON.stringify({ email, redirect_to: `${window.location.origin}${window.location.pathname}#account` }) }, null);
+        setAccountStatus(accountStatus, 'If an account exists for that email, a password reset link has been sent.');
+      }catch(error){ setAccountStatus(accountStatus, error.message, true); }
+    }
+
+    async function submitPasswordUpdate(event){
+      event.preventDefault();
+      setAccountStatus(accountRecoveryStatus, '');
+      if(accountNewPassword.value.length < 6 || accountNewPassword.value !== accountNewPasswordConfirm.value){
+        setAccountStatus(accountRecoveryStatus, 'Passwords must match and contain at least 6 characters.', true);
+        return;
+      }
+      try{
+        const user = await supabaseAuthRequest('/auth/v1/user', { method: 'PUT', body: JSON.stringify({ password: accountNewPassword.value }) });
+        authUser = user;
+        showAccountView(accountDashboardView);
+        await loadAccountDashboard();
+      }catch(error){ setAccountStatus(accountRecoveryStatus, error.message, true); }
+    }
+
+    async function logoutAccount(){
+      try{
+        if(authSession?.access_token) await supabaseAuthRequest('/auth/v1/logout', { method: 'POST' });
+      }catch(error){}
+      persistAuthSession(null);
+      authUser = null;
+      showAccountView(accountAuthView);
+      setAccountStatus(accountStatus, 'You have been logged out.');
+    }
+
+    async function handleAuthRedirect(){
+      const params = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      if(params.get('type') !== 'recovery' || !params.get('access_token')) return;
+      const session = {
+        access_token: params.get('access_token'),
+        refresh_token: params.get('refresh_token') || '',
+        token_type: params.get('token_type') || 'bearer'
+      };
+      authSession = session;
+      try{
+        authUser = await supabaseAuthRequest('/auth/v1/user', { method: 'GET' }, session);
+        persistAuthSession(session);
+        openAccount();
+        showAccountView(accountRecoveryView);
+      }catch(error){
+        persistAuthSession(null);
+        setAccountStatus(accountStatus, 'This password reset link is invalid or expired.', true);
+      }
+    }
 
     function loadCart(){
       try{
@@ -1577,6 +2004,7 @@
       const payload = {
         order_reference: order.reference,
         order_date_time: order.orderDate,
+        customer_id: authUser?.id || null,
         customer_full_name: values.fullName,
         customer_email: values.email,
         customer_phone: values.mobile,
@@ -1775,6 +2203,33 @@
       });
     });
     cartToggle.addEventListener('click', openCart);
+    accountToggle.addEventListener('click', openAccount);
+    accountClose.addEventListener('click', closeAccount);
+    mobileAccountLink.addEventListener('click', event=>{
+      event.preventDefault();
+      closeMobileNav();
+      openAccount();
+    });
+    accountModal.addEventListener('click', event=>{
+      if(event.target === accountModal) closeAccount();
+    });
+    accountAuthForm.addEventListener('submit', submitAccountAuth);
+    accountModeToggle.addEventListener('click', ()=>{
+      accountMode = accountMode === 'login' ? 'signup' : 'login';
+      const isSignup = accountMode === 'signup';
+      accountFormTitle.textContent = isSignup ? 'Create an account' : 'Login';
+      accountSubmit.textContent = isSignup ? 'Create Account' : 'Login';
+      accountModeToggle.textContent = isSignup ? 'Back to login' : 'Create an account';
+      accountForgot.hidden = isSignup;
+      accountNameField.hidden = !isSignup;
+      accountMobileField.hidden = !isSignup;
+      accountConfirmPasswordField.hidden = !isSignup;
+      accountPassword.autocomplete = isSignup ? 'new-password' : 'current-password';
+      setAccountStatus(accountStatus, '');
+    });
+    accountForgot.addEventListener('click', submitPasswordResetRequest);
+    accountRecoveryForm.addEventListener('submit', submitPasswordUpdate);
+    accountLogout.addEventListener('click', logoutAccount);
     cartClose.addEventListener('click', closeCart);
     cartCheckout.addEventListener('click', ()=>{
       closeCart();
@@ -1827,6 +2282,8 @@
     });
     renderCart();
     renderProductCards();
+    restoreAuthSession();
+    handleAuthRedirect();
     window.addEventListener('hashchange', syncProductView);
     syncProductView();
 
