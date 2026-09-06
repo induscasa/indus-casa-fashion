@@ -151,6 +151,26 @@ test.describe('Indus Casa checkout flow', () => {
     await expect(page.locator('#error-payment')).toContainText('Please select a payment method.');
   });
 
+  test('invalid phone, email, and PIN values prevent checkout submission', async ({ page }) => {
+    await page.selectOption('#detail-size', 'M');
+    await page.click('#add-to-cart');
+    await page.click('#cartCheckout');
+    await page.fill('#checkoutFullName', 'Aarav Singh');
+    await page.fill('#checkoutMobile', '12345');
+    await page.fill('#checkoutEmail', 'not-an-email');
+    await page.fill('#checkoutAddress', '42 Garden Lane');
+    await page.fill('#checkoutCity', 'Jaipur');
+    await page.fill('#checkoutState', 'Rajasthan');
+    await page.fill('#checkoutPin', '012345');
+    await page.getByLabel('Cash on Delivery').check();
+
+    await page.click('#placeOrderButton');
+    await expect(page.locator('#error-mobile')).toHaveText('Please enter a valid mobile number.');
+    await expect(page.locator('#error-email')).toHaveText('Please enter a valid email address.');
+    await expect(page.locator('#error-pin')).toHaveText('PIN code must be exactly 6 digits.');
+    await expect(page.locator('#checkoutConfirmation')).not.toHaveClass(/visible/);
+  });
+
   test('payment method selection and enquiry confirmation work', async ({ page }) => {
     await page.selectOption('#detail-size', 'M');
     await page.click('#add-to-cart');
@@ -177,6 +197,39 @@ test.describe('Indus Casa checkout flow', () => {
 
     await page.click('#confirmationClose');
     await expect(page.locator('#checkoutModal')).not.toHaveClass(/open/);
+  });
+
+  test('checkout review shows payment and subtotals and blocks duplicate submission', async ({ page }) => {
+    let notificationCount = 0;
+    await page.route('https://formsubmit.co/ajax/induscasafashion@gmail.com', async route => {
+      notificationCount += 1;
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true }) });
+    });
+
+    await page.selectOption('#detail-size', 'M');
+    await page.click('#add-to-cart');
+    await page.click('#cartCheckout');
+    await expect(page.locator('#checkoutItems')).toContainText('Price: ₹1,999');
+    await expect(page.locator('#checkoutItems')).toContainText('Subtotal ₹1,999');
+    await expect(page.locator('#checkoutPaymentSummary')).toHaveText('Payment method: Not selected');
+
+    await page.fill('#checkoutFullName', 'Aarav Singh');
+    await page.fill('#checkoutMobile', '9876543210');
+    await page.fill('#checkoutEmail', 'aarav@example.com');
+    await page.fill('#checkoutAddress', '42 Garden Lane, Sector 18');
+    await page.fill('#checkoutCity', 'Jaipur');
+    await page.fill('#checkoutState', 'Rajasthan');
+    await page.fill('#checkoutPin', '302001');
+    await page.getByLabel('Cash on Delivery').check();
+    await expect(page.locator('#checkoutPaymentSummary')).toHaveText('Payment method: Cash on Delivery');
+
+    await page.evaluate(() => {
+      document.getElementById('checkoutForm').requestSubmit();
+      document.getElementById('checkoutForm').requestSubmit();
+    });
+    await expect(page.locator('#checkoutConfirmation')).toHaveClass(/visible/);
+    await expect.poll(() => notificationCount).toBe(1);
+    await expect(page.locator('#placeOrderButton')).toBeDisabled();
   });
 
   test('submits complete order notification without blocking confirmation', async ({ page }) => {
@@ -206,6 +259,9 @@ test.describe('Indus Casa checkout flow', () => {
       customer_phone: '9876543210',
       delivery_address: '42 Garden Lane, Sector 18, Jaipur, Rajasthan - 302001',
       ordered_products: expect.stringContaining('Navy Signature | Size/variant: M | Quantity: 1 | Individual price: ₹1,999'),
+      delivery_city: 'Jaipur',
+      delivery_state: 'Rajasthan',
+      delivery_pin: '302001',
       total_order_amount: '₹1,999',
       payment_method: 'Cash on Delivery'
     });

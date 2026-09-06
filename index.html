@@ -571,6 +571,8 @@
     .checkout-item img{width:54px;height:60px;object-fit:cover;background:#12263a}
     .checkout-item h4{font-family:var(--serif);font-size:24px;font-weight:500}
     .checkout-item p{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+    .checkout-item strong{font-size:12px;color:var(--white);white-space:nowrap}
+    .checkout-payment-summary{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
     .checkout-amounts{padding-top:18px;display:grid;gap:10px}
     .checkout-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
     .checkout-row strong{color:var(--white);font-size:13px;letter-spacing:.04em;text-transform:none}
@@ -721,6 +723,8 @@
     .cart-item{border-color:rgba(181,138,58,.18)}
     .cart-item img,.checkout-item img{background:#eeeae2}
     .cart-selling-price,.checkout-row strong{color:var(--ink)}
+    .checkout-item strong{color:var(--ink)}
+    .checkout-payment-summary{color:var(--muted)}
     .cart-quantity span{color:var(--ink)}
     .quantity-button{color:var(--ink);border-color:rgba(181,138,58,.45)}
     .quantity-button:hover{color:#fff;background:var(--gold)}
@@ -858,6 +862,7 @@
                 <div class="checkout-row"><span>Discount</span><strong id="checkoutDiscountTotal">₹0</strong></div>
                 <div class="checkout-row total"><span>Total Amount</span><strong id="checkoutGrandTotal">₹0</strong></div>
               </div>
+              <div class="checkout-payment-summary" id="checkoutPaymentSummary">Payment method: Not selected</div>
             </div>
           </div>
 
@@ -1215,6 +1220,8 @@
     const checkoutMarketTotal = document.getElementById('checkoutMarketTotal');
     const checkoutDiscountTotal = document.getElementById('checkoutDiscountTotal');
     const checkoutGrandTotal = document.getElementById('checkoutGrandTotal');
+    const checkoutPaymentSummary = document.getElementById('checkoutPaymentSummary');
+    const placeOrderButton = document.getElementById('placeOrderButton');
     const checkoutStatus = document.getElementById('checkoutStatus');
     const checkoutFormView = document.getElementById('checkoutFormView');
     const checkoutConfirmation = document.getElementById('checkoutConfirmation');
@@ -1240,6 +1247,7 @@
     const orderNotificationEndpoint = 'https://formsubmit.co/ajax/induscasafashion@gmail.com';
     let currentProductSlug = '';
     let lastCheckout = null;
+    let checkoutSubmitting = false;
 
     const products = {
       'navy-signature': {name:'Navy Signature', category:'Signature Pieces', colour:'Midnight Navy', image:'product-navy-detail.png', sizes:['S','M','L','XL'], marketPrice:2499, sellingPrice:1999, description:'A rich navy expression with the Indus Casa gold mark, composed for quiet confidence and everyday ease.', specs:[]},
@@ -1371,6 +1379,10 @@
       renderCheckoutSummary();
       checkoutStatus.textContent = '';
       checkoutForm.reset();
+      checkoutSubmitting = false;
+      placeOrderButton.disabled = false;
+      placeOrderButton.removeAttribute('aria-busy');
+      checkoutPaymentSummary.textContent = 'Payment method: Not selected';
       document.querySelectorAll('#checkoutForm input, #checkoutForm textarea').forEach(field=>{
         field.setAttribute('aria-invalid', 'false');
       });
@@ -1420,9 +1432,9 @@
             <img src="${product.image}" alt="${product.name}" />
             <div>
               <h4>${product.name}</h4>
-              <p>Size: ${item.size} · Qty: ${item.quantity}</p>
+              <p>Size: ${item.size} · Qty: ${item.quantity} · Price: ${formatPrice(product.sellingPrice)}</p>
             </div>
-            <strong>${formatPrice(product.sellingPrice * item.quantity)}</strong>
+            <strong aria-label="Item subtotal">Subtotal ${formatPrice(product.sellingPrice * item.quantity)}</strong>
           </div>
         `;
       }).join('');
@@ -1451,12 +1463,12 @@
       let valid = true;
       const errorMap = {
         fullName: !values.fullName ? 'Please enter your full name.' : '',
-        mobile: !/^\+?[0-9\s-]{10,15}$/.test(values.mobile) ? 'Please enter a valid mobile number.' : '',
+        mobile: !/^\+?(?:91)?[6-9]\d{9}$/.test(values.mobile.replace(/[\s-]/g, '')) ? 'Please enter a valid mobile number.' : '',
         email: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email) ? 'Please enter a valid email address.' : '',
         address: !values.address ? 'Please enter your delivery address.' : '',
         city: !values.city ? 'Please enter your city.' : '',
         state: !values.state ? 'Please enter your state.' : '',
-        pin: !/^\d{6}$/.test(values.pin) ? 'PIN code must be exactly 6 digits.' : '',
+        pin: !/^[1-9]\d{5}$/.test(values.pin) ? 'PIN code must be exactly 6 digits.' : '',
         payment: !values.paymentMethod ? 'Please select a payment method.' : ''
       };
 
@@ -1509,7 +1521,14 @@
       checkoutFormView.style.display = 'none';
       checkoutConfirmation.classList.add('visible');
       confirmationClose.focus();
-      lastCheckout = { reference: ref, total, payment: values.paymentMethod, orderDate };
+      lastCheckout = {
+        reference: ref,
+        total,
+        payment: values.paymentMethod,
+        orderDate,
+        customer: { ...values },
+        items: cart.map(item=>({ ...item }))
+      };
       return { reference: ref, total, orderDate };
     }
 
@@ -1527,6 +1546,9 @@
         customer_email: values.email,
         customer_phone: values.mobile,
         delivery_address: `${values.address}, ${values.city}, ${values.state} - ${values.pin}`,
+        delivery_city: values.city,
+        delivery_state: values.state,
+        delivery_pin: values.pin,
         ordered_products: items,
         total_order_amount: formatPrice(order.total),
         payment_method: values.paymentMethod,
@@ -1549,12 +1571,16 @@
 
     function submitCheckout(event){
       event.preventDefault();
+      if(checkoutSubmitting) return;
       const values = validateCheckoutForm();
       if(!values){
         checkoutStatus.textContent = 'Please complete all required fields.';
         return;
       }
 
+      checkoutSubmitting = true;
+      placeOrderButton.disabled = true;
+      placeOrderButton.setAttribute('aria-busy', 'true');
       const order = showConfirmation(values);
       sendOrderNotification(values, order);
       checkoutStatus.textContent = '';
@@ -1719,6 +1745,7 @@
     });
     document.querySelectorAll('input[name="paymentMethod"]').forEach(method=>{
       method.addEventListener('change', ()=>{
+        checkoutPaymentSummary.textContent = `Payment method: ${method.value}`;
         document.getElementById('error-payment').textContent = '';
       });
     });
